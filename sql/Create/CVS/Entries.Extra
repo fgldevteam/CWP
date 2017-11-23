@@ -1,0 +1,12 @@
+/ItemCurrentAndMinPrice.dts////
+/ItemCurrentAndMinPrice_job.sql////
+/create_provoda_inventory_view.sql////
+/cwp262-create-item_current_prices.sql////
+/cwp292_create_item_cost_cap.sql////
+/cwp303_create_sum_total_dept.sql////
+/cwp362_create_item_price_change_ix1.sql////
+/cwp390_concept_shop.sql////
+/item_price_change_3threads.dts////
+/item_price_change_3threads_job.sql////
+/mk_item_price_change_staging.sql////
+/readme.txt////

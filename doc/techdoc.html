@@ -1,0 +1,519 @@
+<html>
+<head><title>Corporate Web Portal Application Documentation</title>
+<style type="text/css">
+body, h1, h2, table {
+font-family: helvetica, verdana, arial;
+font-size: 10pt;
+background-color: #ffffff;
+}
+
+body {
+margin-left: 0.5in;
+}
+
+h1 {
+font-size: 18pt;
+color: #000000;
+margin-left:-0.4in;
+}
+
+h2 {
+font-size: 12pt;
+margin-left:-0.4in;
+width: 100%;
+background-color: #e9e9e9;
+}
+
+h3 {
+font-size: 10pt;
+margin-left:-0.4in;
+width: 100%;
+background-color: #e9e9e9;
+}
+
+table {
+width: 600px;
+}
+table th {
+text-align: left;
+vertical-align: middle;
+font-weight: bold;
+background-color: #0066cc;
+border: 1px solid black;
+color: #ffffff;
+padding: 0 2px 0 2px;
+}
+
+table td {
+border: 1px solid silver;
+background-color: #fafafa;
+padding: 0 2px 0 2px;
+}
+
+div.program_code {
+font-family: courier;
+font-size: 8pt;
+}
+
+ul li {
+list-style-type: circle;
+}
+
+.question {
+font-weight: bold;
+}
+
+</style>
+</head>
+<body>
+<h1>Corporate Web Portal Application Documentation</h1>
+
+<h2>Contact Information</h2>
+<table>
+<tr>
+    <th>Component</th>
+    <th>Name</th>
+</tr><tr>
+    <td>Web application</td>
+    <td>Graeme Delve</td>
+</tr><tr>
+    <td>Database</td>
+    <td>Richard Cote</td>
+</tr>
+</table>
+
+<h2>Outstanding Tasks</h2>
+<table>
+<tr>
+    <th>Complete</th>
+    <th>Description</th>
+</tr><tr>
+    <td><input type="checkbox" name="incomplete" disabled="enabled"/></td>
+    <td>Eliminate the dependancy that both IIS and tomcat be on the same physical box for writing and retrieval of E-Learning report</td>
+</tr>
+</table>
+
+<h2>Source Control</h2>
+We use calcvs01.fglcorporate.net as our repository. Talk to system administration to get access to this server. You will require the cvs client in order to checkout projects from CVS. See <a href="http://www.cvsnt.org">cvsnt</a> for more details.  
+
+
+<h3>Tagging Conventions</h3>
+
+[context]-[type]-[major]-[minor][b][beta version]
+<p/>
+<table>
+<tr>
+    <th>Component</th>
+    <th>Description</th>
+</tr><tr>
+    <td>context name</td>
+    <td>cwp</td>
+</tr><tr>
+    <td>type</td>
+    <td>stable or release</td>
+</tr><tr>
+    <td>major</td>
+    <td>the major version number</td>
+</tr><tr>
+    <td>minor</td>
+    <td>the minor version number</td>
+</tr><tr>
+    <td>b</td>
+    <td>indicator for beta version</td>
+</tr><tr>
+    <td>beta version</td>
+    <td>the beta version number (begins at 1 and increments by 1)</td>
+</tr>
+</table>
+<p/>
+Stable tags are created when deploying a new version to QA. Each deploy to QA will be given a unique tag using beta versioning. Once a tag passes QA and is authorized to be deployed to production the stable version is tagged with a release tag (excluding beta versioning).
+Versioning is maintained in JIRA. See project in JIRA for more details.
+<p/>
+Example:
+<p/>
+Today: cwp-release-1-3<br/>
+First build to QA: cwp-stable-1-4b1 (A release candidate for cwp-release-1-4)<br/>
+Second build to QA: cwp-stable-1-4b2 (A release candidate for cwp-release-1-4)<br/>
+<p/>
+If the second build passes QA and is ready for production, retag cwp-stable-1-4b2 with cwp-release-1-4 and deploy this to production.   
+
+
+
+<h2>Third Party Library Dependencies</h2>
+<table>
+<tr>
+    <th style="width:40%;">Library</th>
+    <th>Description</th>
+</tr><tr>
+    <td><a href="http://struts.apache.org">Struts</a></td>
+    <td>Web framework</td>
+</tr><tr>
+    <td><a href="http://struts-menu.sourceforge.net">Struts menu</a></td>
+    <td>Application menu</td>
+</tr><tr>
+    <td>JSTL</td>
+    <td>Standard Tag libraries used in JSP</td>
+</tr><tr>
+    <td><a href="http://logging.apache.org/log4j">Log4j</a></td>
+    <td>Application logging</td>
+</tr><tr>
+    <td><a href="http://jakarta.apache.org/commons/dbcp">Apache commons connection pool (dbcp)</a></td>
+    <td>dbcp for unit testing</td>
+</tr><tr>
+    <td><a href="http://www.junit.org">Junit</a></td>
+    <td>Unit testing</td>
+</tr><tr>
+    <td><a href="http://ant.apache.org/">Ant</a></td>
+    <td>Build system</td>
+</tr><tr>
+    <td><a href="http://ant-contrib.sourceforge.net/">Ant-contrib</a></td>
+    <td>Ant custom tasks (conditionals: if, else ...)</td>
+</tr><tr>
+    <td><a href="http://www.hibernate.org">Hibernate</a></td>
+    <td>Object-relational mapping</td>
+</tr><tr>
+    <td><a href="http://big.faceless.org">Big faceless report generator</a></td>
+    <td>Used to generate pdf files</td>
+</tr><tr>
+    <td><a href="http://www.opensymphony.com/sitemesh/">Sitemesh</a></td>
+    <td>Templating framework</td>
+</tr><tr>
+    <td><a href="http://displaytag.sourceforge.net/">Displaytag</a></td>
+    <td>Tag library used for rendering results in html table format</td>
+</tr><tr>
+    <td><a href="http://www.dynarch.com/projects/calendar">Mishoo calendar</a></td>
+    <td>Javascript calendar used for date selection(s)</td>
+</tr><tr>
+    <td><a href="http://jtds.sourceforge.net">JTDS</a></td>
+    <td>Java JDBC Type 4 Driver</td>
+</tr><tr>
+    <td><a href="http://java.sun.com/products/javamail/">Java Mail API</a></td>
+    <td>Used to send email messages</td>
+</tr>
+<tr>
+    <td><a href="http://jexcelapi.sourceforge.net/">Jexcel API</a></td>
+    <td>Used to generate excel files</td>
+</tr>
+<tr>
+    <td><a href="http://www.akadia.com/services/sqlsrv_jdbc.html">mssqlserver api</a></td>
+    <td>One of 3 libraries used to connect to sql server using jdbc</td>
+</tr>
+<tr>
+    <td><a href="//www.akadia.com/services/sqlsrv_jdbc.html">msutil API</a></td>
+    <td>One of 3 libraries used to connect to sql server using jdbc</td>
+</tr>
+<tr>
+    <td><a href="//www.akadia.com/services/sqlsrv_jdbc.html">msbase API</a></td>
+    <td>One of 3 libraries used to connect to sql server using jdbc</td>
+</tr>
+</table>
+
+<h2>User Interface</h2>
+The jsps are assembled using site mesh. By using this library we are able to abstract the user interface template into a single page thus allowing us to change the layout of the website by modifying only the template file.
+
+<h2>Testing</h2>
+JUnit is used for unit testing. There are test files within the same directory as the java source.
+
+
+<h2>Encoding</h2>
+All jsps are saved in UTF-8 format. All jsps are rendered to the client's browser in UTF-8 format. This is required for french characters to be displayed properly to the client.
+<p/>
+All jsps must include the following:
+<p/>
+
+<div class="program_code">
+    &lt;@ page language="java" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"/&gt;
+    <br/>...
+    <br/>&lt;html&gt;
+    <br/>&lt;head&gt;
+    <br/>&lt;meta name="ContentType" content="text/html; charset=UTF-8"/&gt;
+    <br/>...
+</div>
+
+<h2>Message Resources</h2>
+All resource files are saved in UTF-8 format. This is required so that french translations can be created using native encodings. At build time, we run the native2ascii.exe java utility to convert the properties files to unicode escaped ascii text files. All java properties files must be read using ISO-8859-1 encoding. We decided to do this at build time so that the resource files can remain in their native encodings for easier maintenance. It is a lot easier to have translators create resource files in native encodings and much easier to read.
+<p/>
+The native2ascii.exe utility is run as an ant task. The output files are named like the following:
+<br/>
+<ul>
+    <li>[resource]_[language].properties -> [resource]_ascii_[language].properties</li>
+</ul>
+
+The following files need translation:
+<ul>
+    <li>language_fr.properties</li>
+    <li>calendar-fr.js</li>
+</ul>
+NOTE: calendar_fr.js is not run thru native2ascii.exe. This file is translated manually.
+
+<h2>Database</h2>
+Here is a list of tables that are dynamically modified by the web application:
+<ul>
+    <li>application_user</li>
+    <li>user_roles</li>
+    <li>user_store</li>
+    <li>document</li>
+    <li>notice</li>
+    <li>reporter</li>
+    <li>sum_total_course</li>
+</ul>
+
+<h2>Server Configurations</h2>
+<table>
+<tr>
+    <th style="width:25%;">Web Server</th>
+    <th style="width:25%;">Development</th>
+    <th style="width:25%;">QA</th>
+    <th style="width:25%;">Production</th>
+</tr><tr>
+    <td>Server</td>
+    <td>Tomcat 5.5.17</td>
+    <td>IIS</td>
+    <td>IIS</td>
+</tr><tr>
+    <td>Server name/ip</td>
+    <td>localhost</td>
+    <td>fgcalgweb0002</td>
+    <td>fgcalgweb0006</td>
+</tr><tr>
+    <td>Username</td>
+    <td>n/a</td>
+    <td>n/a</td>
+    <td>n/a</td>
+</tr><tr>
+    <td>Password</td>
+    <td>n/a</td>
+    <td>n/a</td>
+    <td>n/a</td>
+</tr><tr>
+    <td>DNS</td>
+    <td>n/a</td>
+    <td><a href="http://corpqa.fgl.net/cwp/">http://corpqa.fgl.net/cwp/</a></td>
+    <td><a href="http://corp.fgl.net">http://corp.fgl.net</a></td>
+</tr>
+</table>
+<p/>
+<table>
+<tr>
+    <th style="width:25%;">Application Server</th>
+    <th style="width:25%;">Development</th>
+    <th style="width:25%;">QA</th>
+    <th style="width:25%;">Production</th>
+</tr><tr>
+    <td>Server</td>
+    <td>Tomcat 5.5.17</td>
+    <td>Tomcat 5.5.17</td>
+    <td>Tomcat 5.5.9</td>
+</tr><tr>
+    <td>Server name/ip</td>
+    <td>localhost</td>
+    <td>fgcalgweb0002</td>
+    <td>fgcalgweb0006</td>
+</tr><tr>
+    <td>Admin username</td>
+    <td>n/a</td>
+    <td>admin</td>
+    <td>admin</td>
+</tr><tr>
+    <td>Admin password</td>
+    <td>n/a</td>
+    <td>admin</td>
+    <td>5*Hotel</td>
+</tr>
+<tr>
+    <td>CWP Username</td>
+    <td>n/a</td>
+    <td>n/a</td>
+    <td>n/a</td>
+</tr><tr>
+    <td>CWP Password</td>
+    <td>n/a</td>
+    <td>n/a</td>
+    <td>n/a</td>
+</tr>
+</table>
+<p/>
+
+<table>
+<tr>
+    <th style="width:25%;">Database Server</th>
+    <th style="width:25%;">Development</th>
+    <th style="width:25%;">QA</th>
+    <th style="width:25%;">Production</th>
+</tr>
+<tr>
+    <td>cwp Server</td>
+    <td>cwp Microsoft SQL Server</td>
+    <td>cwp Microsoft SQL Server</td>
+    <td>cwp Microsoft SQL Server</td>    
+</tr>
+<tr>
+    <td>Server name/ip</td>
+    <td>fgcalgdbms003</td>
+    <td>fgcalgdbms003</td>
+    <td>fgcalgdbms001</td>
+</tr>
+<tr>
+    <td>Username</td>
+    <td>cwpuser</td>
+    <td>cwpuser</td>
+    <td>cwpuser</td>
+</tr>
+<tr>
+    <td>Password</td>
+    <td>cwpuser</td>
+    <td>cwpuser</td>
+    <td>cwpuser</td>
+</tr>
+</table>
+<p/>
+<table>
+<tr>
+    <th style="width:25%;">Database Server</th>
+    <th style="width:25%;">Development</th>
+    <th style="width:25%;">QA</th>
+    <th style="width:25%;">Production</th>
+</tr>
+<tr>
+    <td>SumTotal Server</td>
+    <td>Microsoft SQL Server</td>
+    <td>Microsoft SQL Server</td>
+    <td>Microsoft SQL Server</td>    
+</tr>
+<tr>
+    <td>Server name/ip</td>
+    <td>calsumtst</td>
+    <td>calsum01</td>
+    <td>calsum01</td>
+</tr>
+<tr>
+    <td>Username</td>
+    <td>sumtotal</td>
+    <td>sumtotal_cwp</td>
+    <td>sumtotal_cwp</td>
+</tr>
+<tr>
+    <td>Password</td>
+    <td>sumtotal</td>
+    <td>7Cwp_sT</td>
+    <td>7Cwp_sT</td>
+</tr>
+</table>
+<p/>
+<table>
+<tr>
+    <th style="width:25%;">Mail Server</th>
+    <th style="width:25%;">Development</th>
+    <th style="width:25%;">QA</th>
+    <th style="width:25%;">Production</th>
+</tr><tr>
+    <td>Server name/ip</td>
+    <td>calrelay01.fglcorporate.net</td>
+    <td>calrelay01.fglcorporate.net</td>
+    <td>calrelay01.fglcorporate.net</td>
+</tr><tr>
+    <td>Username</td>
+    <td>n/a</td>
+    <td>n/a</td>
+    <td>n/a</td>
+</tr><tr>
+    <td>Password</td>
+    <td>n/a</td>
+    <td>n/a</td>
+    <td>n/a</td>
+</tr>
+</table>
+<p/>
+<table>
+<tr>
+    <th style="width:25%;">Report Server</th>
+    <th style="width:25%;">Development</th>
+    <th style="width:25%;">QA</th>
+    <th style="width:25%;">Production</th>
+</tr><tr>
+    <td>Server name/ip</td>
+    <td>localhost</td>
+    <td>fgcalgweb0002</td>
+    <td>fgcalgweb0006</td>
+</tr><tr>
+    <td>User name</td>
+    <td>Runs as NT service using local sa account</td>
+    <td>Runs as NT service using local sa account</td>
+    <td>Runs as NT service using local sa account</td>
+</tr><tr>
+    <td>Password</td>
+    <td>n/a</td>
+    <td>n/a</td>
+    <td>n/a</td>
+</tr>
+</table>
+
+<h2>Production Server Setup</h2>
+<ul>
+<li>Tomcat is located under E:\tomcat_node1 and E:\tomcat_node2</li>
+<li>IIS isapi configurations located under E:\tomcat_config</li>
+<li>JRE is located under E:\java</li>
+<li>Reporter application is now an integrated part of the CWP application: Refer to the Reporter Module document in the same folder as this document</li>
+</ul>
+
+<h2>Deployment</h2>
+<ol>
+    <li>Copy mail.jar, activation.jar, jtdsxxx.jar, naming-factory-dbcp.jar to %CATALINA_HOME%/common/lib</li>
+    <li>Install Tomcat</li>
+    <li>Install IIS</li>
+    <li>Install IIS-Tomcat connector (jk)</li>
+    <li>Production server requires access to
+        <ul>
+            <li>Internet</li>
+            <li>SMTP mail server (unauthenticated access)</li>
+            <li>Production database</li>
+        </ul>
+    </li>
+    <li>Deploy .WAR</li>
+</ol>
+<h2>Suggestions</h2>
+<ol>
+	<li> Improvement needed: Will be nice to upgrade to using hibernate 3 with annotations</li>
+</ol>
+<h2>E-Learning Report IIS Requirements</h2>
+Whether in development, QA, or production environments, the saving and retrieval
+of the E-Learning report requires the following:
+<ol>
+    <li>IIS must be installed and running</li>
+    <li>A virtual directory must be created in IIS for the CWP application
+		<ul>
+			<li>the name of the virtual directory must be <b>elearning</b></li>
+			<li>for development set the virtual directory path to <b>C:\cwp\elearning</b></li>
+			<li>for QA set the virtual directory path to <b>C:\ProjectResources\CWP\elearning</b></li>
+			<li>for production set the virtual directory path to <b>E:\cwp\elearning</b></li>
+		</ul>
+	</li>
+</ol>
+<h3>E-Learning Report Known Issues:</h3>
+	<li>Current code responsible for writing the E-Learning pdf or excel file to the file<br/>system is dependant on the IIS and tomcat instances being on the same server
+	</li>
+
+<h2>Store Auto-Login</h2>
+Stores are identified thru a registry entry and are automatically logged into the website. This registry entry exists on the client's machine not the server.
+
+<div class="program_code">
+<pre>
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\5.0\User Agent]
+"Platform"="##XXXX##"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\5.0\User Agent\Post Platform]
+".NET CLR 1.1.4322"=""
+
+Where XXXX is a left-padded zero 4 digit store number.
+</pre>
+</div>
+
+
+
+</body>
+</html>
+
+
+

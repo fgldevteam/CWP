@@ -1,0 +1,92 @@
+RELEASE NOTES
+=============
+
+Note - The most recent are at the top
+
+TAG:            cwp-release-1-0-9 (cwp-stable-1_0_9_20051201-0900)
+RELEASE DATE:   February 21, 2006
+CHANGE LOG:
+- Pricing Issues Form is now sent to support link with the contents of the pricing
+  issue embedded in the email rather than attached using a pdf
+- Pricing issues are logged in the database
+- Added style/upc validation when submitting a pricing issue
+- Added duplicate pricing issue validation to prevent stores from submitting pricing
+  issues that have already been submitted by another store
+- Added current pricing issues listing to main page so users can view the current
+  pricing issues
+- Refactored menu code to incorporate the roles permissions adapter exposed by
+  struts menu component
+- Added pricing issues manager role
+- Added pricing issues administration section to allow authorized users to close
+  issues as they become resolved.
+
+TAG:            cwp-release-1_0_8_20051027-1015
+RELEASE DATE:   Oct 27, 2005
+CHANGE LOG:
+- Added Pricing Issues Form under "Pricing Issue Reporting" in the Document Search
+  section. Also added 2 forms under "Policies and Procedures" and "Inv Management".
+  They are Inventory Adjustment Form and Non Warranty Adjustment Form.
+
+TAG:			cwp-release-1_0_7_20051003-0930
+RELEASE DATE:	October 7, 2005
+CHANGE LOG:
+- Altered the Repair & Maintenance form such that users with a loss prevention issue
+  are asked to refer to the Loss Prevention Repair Procedures Manual in the document
+  centre.
+
+TAG:			cwp-release-1_0_6_20050802-1630
+RELEASE DATE:   August 2, 2005
+CHANGE LOG:
+- Modifying document management such that document managers can create links to
+  external web sites. (Externally linked documents are opened in a new browser window.)
+- File download URLs are now properly URL encoded. (The problem was with file names
+  that contained reserved URL characters)
+
+TAG:            cwp-release-1_0_5-20050708-1404
+RELEASE DATE:   July 11, 2005
+CHANGE LOG:
+- Added the power2learn link to the links menu
+
+TAG:			cwp-release-1_0_4-20050629-2230
+RELEASE DATE:	June 29, 2005
+CHANGE LOG:
+- Added some code to prevent users with 'User Manager' role from updating their own 
+  security roles or stores they are allowed to manage. Administrators are the exception.
+
+TAG:			cwp-release-1_0_3-20050607-1900
+RELEASE DATE:	June 7, 2005
+CHANGE LOG:
+- Rebuilt the ACL infrastructure by incorporating permissions with roles. 
+- Added new security role called 'Read-Only User' for users that require
+  read-only access to the portal.
+- Prepended store number to the email subject line for all claim forms.
+- Stores are now CCed when emails are sent for all claims and repair & maintenance forms.
+- Administration user list now displays in alphabetical order by first name.
+
+TAG:            cwp-release-1_0_2-20050606-0800
+RELEASE DATE:   June 6, 2005
+CHANGE LOG:
+- Added the power2learn link to the links menu
+ADDENDUM:
+- This tag was backed out from production June 6, 2005 due to problems
+  with the Power2Learn site.
+
+TAG:            cwp-release-1_0_1-20050531-1153
+RELEASE DATE:   June 2, 2005
+CHANGE LOG:
+- Item price change report for now defaults to mark down price direction (instead of mark up)
+- Fixed a problem with download servlet as the 'save as' file dialog (in some instances)
+  would not display the filename properly. Instead it would display 'download.do'.
+- Increased the maximum file upload size to 15 MB instead of 50 KB.
+- Added store number to email subject line for repair & maintenance forms.
+
+TAG:            cwp-release-1_0-20050530-0800
+RELEASE DATE:   May 30, 2005
+CHANGE LOG:
+- Deployed first version of portal for all stores.
+
+
+Tag: cwp-release-1-4_20061120-0800
+RELEASE DATE: November 20, 2006
+CHANGE LOG:
+- Deployed the excel part of the e-learning reports

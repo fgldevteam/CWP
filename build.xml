@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="./ant2html.xsl"?>
+
+<project basedir="." default="compile" name="CWP">
+    <description>Franchise Web Portal Build File</description>
+
+    <!--Properties -->
+    <property name="build.debug" value="true" />
+    <property file="build.properties" />
+    <property name="src.dir" value="src" />
+    <property name="generated.dir" value="generated" />
+    <property name="build.dir" value="build" />
+    <property name="classes.dir" value="${build.dir}/classes" />   
+    <property name="publishDir" value="dist" />
+    <property name="meta.dir" value="${publishDir}/META-INF" />   
+    <property name="web.dir" value="web" />
+    <property name="lib.dir" value="lib" />
+    <property name="dist.dir" value="dist" />
+	<property name="reporterController" value="com\fgl\cwp\reporter\controller" />
+    <property name="web.lib.dir" value="${web.dir}/WEB-INF/lib" />
+    <property name="filename.jar" value="cwp.jar" />
+    <property name="filename.war" value="cwp.war" />
+    <property name="test.results.dir" value="test-results" />
+    <property name="context.file" value="tomcat5.5/context.xml"/>
+    <property name="filters.dir" value="filters"/>
+    <!-- Default server specific configurations -->
+    <property name="deploy.filters.file.default" value="deploy/deployFilters.properties"/>
+
+    <path id="build.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar" />
+            <include name="*.zip" />
+        </fileset>
+        <fileset dir="${web.lib.dir}">
+            <include name="*.jar" />
+            <include name="*.zip" />
+        </fileset>
+    </path>
+
+    <!-- Third party Ant tasks -->
+    <taskdef name="hibernatedoclet" classname="xdoclet.modules.hibernate.HibernateDocletTask">
+        <classpath>
+            <fileset dir="${lib.dir}/xdoclet">
+                <include name="*.jar" />
+            </fileset>
+        </classpath>
+    </taskdef>
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <fileset dir="${lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+        </classpath>
+    </taskdef>
+
+    <!-- Targets -->
+    <target name="init">
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${classes.dir}" />
+        <mkdir dir="${generated.dir}" />
+        <mkdir dir="${publishDir}" />
+        <mkdir dir="${meta.dir}"/>   
+        <mkdir dir="${test.results.dir}" />
+        <if>
+            <equals arg1="${server}" arg2="QA"/>
+            <then>
+                <echo level="info" message="Overriding default server specific configurations for QA"/>
+                <filterset id="deploy.filter.set">
+                    <filtersfile file="${deploy.filters.file.default}"/>
+                    <filterset>
+                        <filtersfile file="deploy/deployFiltersQA.properties"/>
+                    </filterset>
+                </filterset>
+            </then>
+            <elseif>
+                <equals arg1="${server}" arg2="PROD"/>
+                <then>
+                    <echo level="info" message="Overriding default server specific configurations for PROD"/>
+                    <filterset id="deploy.filter.set">
+                        <filtersfile file="${deploy.filters.file.default}"/>
+                        <filterset>
+                            <filtersfile file="deploy/deployFiltersPROD.properties"/>
+                        </filterset>
+                    </filterset>
+                </then>
+	    </elseif>
+            <elseif>
+                <equals arg1="${server}" arg2="DEV"/>
+                <then>
+                    <echo level="info" message="Overriding default server specific configurations for DEV"/>
+                    <filterset id="deploy.filter.set">
+                        <filtersfile file="${deploy.filters.file.default}"/>
+                        <filterset>
+                            <filtersfile file="deploy/deployFiltersDEV.properties"/>
+                        </filterset>
+                    </filterset>
+                </then>
+            </elseif>
+            <else>
+                <echo level="info" message="Using default server specific configurations"/>
+                <filterset id="deploy.filter.set">
+                    <filtersfile file="${deploy.filters.file.default}"/>
+                </filterset>
+            </else>
+        </if>
+    </target>
+
+    <target name="clean" description="Cleans out the build directory">
+        <delete dir="${build.dir}" />
+        <delete dir="${publishDir}" />
+        <delete dir="${generated.dir}" />
+        <delete dir="${test.results.dir}" />
+        <delete dir="${filters.dir}" />
+    </target>
+
+    <target name="generate.hibernate" depends="init" description="Generates Hibernate class descriptor files.">
+        <delete>
+            <fileset dir="${generated.dir}">
+                <include name="**/*.hbm.xml" />
+            </fileset>
+        </delete>
+        <hibernatedoclet destdir="${generated.dir}" excludedtags="@version,@author,@todo" verbose="false" force="true">
+            <fileset dir="${src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+            <hibernate version="2.0" />
+        </hibernatedoclet>
+    </target>
+    
+   <target name="init.filter">
+        <delete dir="${filters.dir}"/>
+        <mkdir dir="${filters.dir}"/>
+    </target> 
+        
+    <target name="generate.properties" depends="init, init.filter" description="Converts UTF8 encoded properties files to ASCII.">
+        <echo level="info" message="test"/> 
+        <copy todir="${filters.dir}" overwrite="true">
+            <fileset dir="${src.dir}">
+                <include name="language*.properties"/>
+                <include name="reporter.properties"/>
+                <include name="dbpool.properties"/>
+            </fileset>
+            <filterset refid="deploy.filter.set"/>
+        </copy>   
+
+       <delete>
+            <fileset dir="${generated.dir}">
+                <include name="language*.properties" />
+                <include name="reporter.properties"/>
+                <include name="dbpool.properties"/>
+            </fileset>
+        </delete>
+
+        <native2ascii dest="${generated.dir}" src="${filters.dir}" encoding="UTF8" includes="language*.properties">
+            <mapper type="regexp" from="language(.*)\.properties" to="language_ascii\1.properties"/>
+        </native2ascii>
+
+        <copy todir="${generated.dir}" overwrite="true">
+            <fileset dir="${src.dir}">
+                <include name="log4j.properties"/>
+            </fileset>
+            <filterset refid="deploy.filter.set"/>
+        </copy>   
+    </target>
+
+    <target name="compile" depends="generate.hibernate, generate.hibernate, generate.properties" description="Compiles the Java source code files">
+            <javac source="1.5" target="1.5" srcdir="${src.dir}" destdir="${classes.dir}" debug="${build.debug}">
+            <classpath>
+                <path refid="build.classpath" />
+            </classpath>
+        </javac>
+        <copy todir="${classes.dir}" overwrite="true">
+            <fileset dir="${src.dir}">
+                <exclude name="**/*Test.class" />
+                <exclude name="**/*Tests.class" />
+                <exclude name="**/reporter.properties" />
+                <exclude name="**/dbpool.properties" />
+				<exclude name="**/language.properties" />
+                <exclude name="**/log4j.properties" />
+				<include name="**/*.properties" />               
+                <include name="**/*.xml" />
+                <include name="**/*.dtd" />
+            </fileset>
+            <fileset dir="${generated.dir}">
+                <include name="**/*.properties" />
+                <include name="**/*.xml" />
+            </fileset>
+            <fileset dir="${filters.dir}">
+            	<include name="dbpool.properties"/>
+            </fileset>
+        </copy>
+        <copy todir="${classes.dir}/${reporterController}" overwrite="true">
+             <fileset dir="${filters.dir}">
+            	<include name="reporter.properties"/>
+            </fileset>
+        </copy>
+        <copy todir="${web.dir}/WEB-INF/classes" overwrite="true">
+            <fileset dir="${classes.dir}">
+               <!-- <include name="**/*.hbm.xml" /> -->
+            </fileset>
+        </copy>
+   
+    </target>
+
+    <target name="cleancompile" depends="clean,compile" />
+
+	<!--
+	// Update project to specific tag and set the release number of the project
+	//-->
+	<target name="cvsupdate">
+		<input message="Building your WAR will cause you to lose any outstanding changes. Do you wish to continue?"
+			validargs="y,n"
+			addproperty="war.continue"
+		/>
+		<condition property="war.abort">
+			<equals arg1="n" arg2="${war.continue}"/>
+		</condition>
+		<fail if="war.abort">Build aborted by user.</fail>
+		<input message="Please enter the release tag being deployed:" addproperty="war.tag" />
+    	<cvs command="update -A -d -C -r ${war.tag}" 
+			cvsRoot=":pserver;hostname=calcvs01.fglcorporate.net:/data/cvsroot" 
+			dest="."
+		/>
+<!--  
+    	<replace file="${web.dir}/jsp/tiles/release.jsp" value="${war.tag}">
+    		<replacefilter token="@releaseTag@"/>
+    	</replace>
+-->
+	</target>
+
+    <target name="jar" depends="compile">
+
+    </target>
+    
+    <target name="generate.context" depends="init" description="Generate server specific context file">
+        <copy file="${context.file}" todir="${meta.dir}" overwrite="true">
+            <filterset refid="deploy.filter.set"/>
+        </copy>
+    </target>
+    
+    <target name="war" depends="cvsupdate, jar, generate.context" description="Builds a .war file for deployment">
+        <war destfile="${publishDir}/${filename.war}" webxml="${web.dir}/WEB-INF/web.xml">
+            <lib dir="${web.lib.dir}"/>
+            <metainf dir="${meta.dir}"/>   
+          <!--  <lib file="${build.dir}/${filename.jar}" /> -->
+            <zipfileset dir="${web.dir}">
+                <exclude name="WEB-INF/web.xml" />
+                <!-- <exclude name="WEB-INF/classes/**" /> -->
+                <exclude name="WEB-INF/jsp/**" />
+                <exclude name="WEB-INF/lib/**" />
+                <exclude name="WEB-INF/sessions/**" />
+            </zipfileset>
+        </war>
+    </target>
+    <target name="war.qa" description="Builds a .war file for QA environment">
+        <echo level="info">+=========================================================+</echo>   
+        <echo level="info">| Building .war for QA environment                        |</echo>   
+        <echo level="info">+=========================================================+</echo>   
+        <property name="server" value="QA"/>
+        <antcall target="clean"/>   
+        <antcall target="war"/>   
+    </target>   
+ 
+    <target name="war.prod" description="Builds a .war file for PROD environment">
+        <echo level="info">+=========================================================+</echo>   
+        <echo level="info">| Building .war for PROD environment                      |</echo>
+        <echo level="info">+=========================================================+</echo>   
+        <property name="server" value="PROD"/>
+        <antcall target="clean"/>
+        <antcall target="war"/>   
+    </target>  
+
+    <target name="war.dev" description="Builds a .war file for DEV environment">
+        <echo level="info">+=========================================================+</echo>   
+        <echo level="info">| Building .war for DEV environment                       |</echo>   
+        <echo level="info">+=========================================================+</echo>   
+        <property name="server" value="DEV"/>
+        <antcall target="clean"/>   
+        <antcall target="war"/>   
+    </target>   
+    
+    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" />
+    
+    <!-- 4. Deploy the WAR using the manager application -->
+	 <target name="deployOnly" depends=""  description="Hot deploy the application">
+		    <echo message="Deploying the WAR to Tomcat"/>
+		    <deploy url="${manager.url}"
+		            username="${manager.user}"
+		            password="${manager.password}"  
+		            path="/${appName}"
+		            war="file:dist/${appName.war}"
+		            update="true"/>
+  	  </target> 
+</project>

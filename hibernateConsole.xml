@@ -1,0 +1,35 @@
+<project name="Hibernate Console" default="run">
+    <property name="hibernate.home" value="C:/Tools/hibernate-2.1"/>
+    <property name="hibernate-core.jar" value="${hibernate.home}/hibernate2.jar"/>
+    <property name="hibernate-core.lib.dir" value="${hibernate.home}/lib"/>
+    
+    <property name="hibernate-console.home" value="${hibernate.home}/extensions/console"/>
+    <property name="hibernate-console.lib.dir" value="${hibernate-console.home}/lib"/>
+    <property name="hibernate-console.jar" value="${hibernate-console.home}/hibernateconsole.jar"/>
+    
+    <property name="build.dir" value="web/WEB-INF/classes"/>
+    <property name="jdbc.driver.jar" value="lib/jtds-1.0.3.jar"/>
+    
+    <path id="lib.class.path">
+    	<path location="${hibernate-core.jar}"></path>
+        <fileset dir="${hibernate-core.lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${hibernate-console.lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="web/WEB-INF/lib">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+    
+    <target name="run" description="Run Hibernate Console.">
+        <java classname="net.sf.hibernate.console.Start" classpathref="lib.class.path" fork="true"> 
+            <classpath>
+                <path location="${jdbc.driver.jar}"/>
+                <path location="${build.dir}"/>
+                <path location="${hibernate-console.jar}"/>
+            </classpath>
+        </java>
+    </target>
+</project>

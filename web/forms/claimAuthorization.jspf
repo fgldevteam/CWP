@@ -1,0 +1,6 @@
+<table class="smalltext" style="width:95%;align:center;">
+    <tr>
+        <td align="left"><fmt:message key="form.label.courierrefnum"/>:____________________</td>
+        <td align="right"><fmt:message key="form.label.authorization"/>:____________________&#160;&#160;<span class="emsmalltext"><fmt:message key="form.claim.signatureofclaims"/></span></td>
+    </tr>
+</table>

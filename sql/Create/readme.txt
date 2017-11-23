@@ -1,0 +1,1 @@
+Creation scripts for table, index, procedure, trigger, view, sequence

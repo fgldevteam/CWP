@@ -1,0 +1,91 @@
+<tr>
+	<c:choose>
+			<c:when test="${docType == 'group'}">
+				<c:set var="docParameters" value="groupId=${group.id}&subGroupId=&categoryId=&documentId="/>
+				<td id="group" class="headerRow">
+					<c:out value="${group.title}"/>
+					<c:set var="currentTitle" value="${group.escapedTitle}"/>
+				</td>
+				<td>
+					<c:out value="Group"/>
+				</td>
+				<td>
+					<c:out value="${group.category}"/>
+				</td>
+	    </c:when>
+	    <c:when test="${docType =='subGroup'}">
+	    	<c:set var="docParameters" value="groupId=${group.id}&subGroupId=${subGroup.id}&categoryId=&documentId="/>
+	        <td id="subGroup" class="headerRow">
+						<c:out value="${subGroup.title}"/>
+						<c:set var="currentTitle" value="${subGroup.escapedTitle}"/>
+					</td>
+					<td>
+						<c:out value="Sub Group"/>
+					</td>
+					<td>
+						<c:out value="${subGroup.category}"/>
+					</td>
+	    </c:when>
+	    <c:when test="${docType == 'category'}">
+	    	<c:set var="docParameters" value="groupId=${group.id}&subGroupId=${subGroup.id}&categoryId=${category.id}&documentId="/>
+	        <td id="category" class="headerRow">
+						<c:out value="${category.title}"/>
+						<c:set var="currentTitle" value="${category.escapedTitle}"/>
+					</td>
+					<td>
+						<c:out value="Category"/>
+					</td>
+					<td>
+						<c:out value="${category.category}"/>
+					</td>
+	    </c:when>
+	    <c:otherwise>
+	    	<c:if test="${doc.type != 'F'}">
+	   	 		<%-- it's a document, need to determine if subgroup and category are null --%>
+	   	 		<c:set var="docParameters" value="groupId=${group.id}&documentId=${doc.id}"/>
+	   	 		
+	   	 		<c:choose>
+	   	 			<c:when test="${not empty subGroup}">
+	   	 				<c:set var="docParameters" value="${docParameters}&subGroupId=${subGroup.id}"/>
+	   	 			</c:when>
+	   	 			<c:otherwise>
+	   	 				<c:set var="docParameters" value="${docParameters}&subGroupId="/>
+	   	 			</c:otherwise>
+	   	 		</c:choose>
+	   	 		
+	   	 		<c:choose>
+	   	 			<c:when test="${not empty category}">
+	   	 				<c:set var="docParameters" value="${docParameters}&categoryId=${category.id}"/>	
+	   	 			</c:when>
+	   	 			<c:otherwise>
+	   	 				<c:set var="docParameters" value="${docParameters}&categoryId="/>	
+	   	 			</c:otherwise>
+	   	 		</c:choose>
+				</c:if>
+		    <td>
+					<c:out value="${doc.title}"/>
+					<c:set var="currentTitle" value="${doc.escapedTitle}"/>
+				</td>
+				<td>
+					<c:out value="Document"/>
+				</td>
+				<td>
+					<c:out value="${doc.category}"/>
+				</td>
+	    </c:otherwise>
+	</c:choose>
+		<td>
+			<c:choose>
+				<c:when test="${docType == 'document' && doc.type == 'F'}">
+					<fmt:message key="admin.document.na"/>
+				</c:when>
+				<c:otherwise>
+					<html:link page="${editAction}${docParameters}"><fmt:message key="admin.document.edit"/></html:link>
+					&nbsp;|&nbsp;<html:link page="${deleteAction}${docParameters}" onclick="return(confirmDelete('${currentTitle}'))"><fmt:message key="admin.document.delete"/></html:link>
+					<c:if test="${firstRow}">
+						&nbsp;|&nbsp;<html:link page="/secure/admin/addDocument.do"><fmt:message key="admin.document.add"/></html:link>...
+					</c:if>
+				</c:otherwise>
+			</c:choose>
+		</td>
+</tr>

@@ -1,0 +1,6 @@
+dist
+filters
+generated
+test-results
+build/classes
+web/WEB-INF/classes

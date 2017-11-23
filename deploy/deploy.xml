@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--============================================================================
+// Use this script to deploy .war file to a tomcat server.
+// This script will automatically stop/start tomcat using tomcat custom ant tasks.
+//
+// This script requires:
+// 1. ${ant_contrib_jar} is copied t %ANT_HOME%/lib
+// 2. deploy.properties exists in the same directory as this file and is
+//    configured with server specific properties
+// 3. catalina.properties exists in the same directory as this file and defines
+//    the custom tomcat ant tasks
+//===========================================================================-->
+<project name="deploy_script" default="help">
+    <property file="deploy.properties"/>
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${ant_contrib_jar}"/>
+        </classpath>
+    </taskdef>
+    
+    <taskdef file="catalina.properties">
+        <classpath>
+            <pathelement location="${catalina_ant_jar}"/>
+        </classpath>
+    </taskdef>
+    
+    <!--========================================================================
+    // Display help message to user
+    //=======================================================================-->
+    <target name="help">
+        <echo level="info">Tomcat Deploy Script</echo>
+        <echo/>
+        <echo level="info">Important:</echo>
+        <echo level="info">  - Modify deploy.properties file before using this script</echo>
+        <echo level="info">  - Requires catalina.properties</echo>
+        <echo/>
+        <echo level="info">target: [deploy]</echo>
+        <echo level="info">target: [deploy_using_backup] (NOT IMPLEMENTED YET!)</echo>
+        <echo/>
+        <!--echo level="info">[deploy_using_backup]: Deploy the given backup .zip file</echo>
+        <echo level="info">   arg: -Ddeploy_backup_file=[backup file name]</echo-->
+    </target>
+    
+    <!--========================================================================
+    // Global initializations
+    //=======================================================================-->   
+    <target name="init">
+        <tstamp>
+            <format property="backup_timestamp" pattern="${backup_filename_timestamp_pattern}"/>
+        </tstamp> 
+        <property name="backup_temp_dir" value="${backup_dir}/temp"/>
+        <mkdir dir="${web_server_deploy_dir}"/>
+    </target>
+    
+    <!--========================================================================
+    // Undeploy the given application from tomcat, if it exists already.
+    //=======================================================================-->
+    <target name="undeploy">
+        
+        <available property="does_application_exist" file="${app_server_context_dir}/${catalina_context_name}.xml"/>
+        
+        <if>
+            <equals arg1="${does_application_exist}" arg2="true"/>
+            <then>
+                <echo level="debug">Application already exists</echo>
+                <echo level="info">Undeploying application...</echo>
+                <undeploy url="${catalina_manager_url}"
+                        username="${catalina_manager_user}"
+                        password="${catalina_manager_password}"
+                        path="/${catalina_context_name}"/>
+                
+                <!-- pause while tomcat undeploys the application -->
+                <sleep seconds="20"/>
+                
+                <!-- Make sure that these files/dir are really deleted, otherwise
+                     we will not be able to deploy -->
+                <delete file="${app_server_context_dir}/${catalina_context_name}.xml" verbose="true" failonerror="no"/>
+                <delete dir="${app_server_deploy_dir}/${catalina_context_name}" verbose="true" failonerror="no"/>
+            </then>
+        </if>
+    </target>
+
+    <!--========================================================================
+    // Backup existing files, if they exist
+    //=======================================================================-->
+    <target name="backup" depends="init" description="Create a backup of existing war and static web files">
+        <echo level="debug">Deleting existing backup temporary directory</echo>
+        <delete dir="${backup_temp_dir}"/>
+        
+        <echo level="debug">Creating backup temporary directory</echo>
+        <mkdir dir="${backup_temp_dir}"/>
+        
+        <echo level="info">Backing up existing .war</echo>
+        <copy todir="${backup_temp_dir}" failonerror="no">
+            <fileset file="${app_server_deploy_dir}/${catalina_context_name}.war"/>
+        </copy>
+
+        <echo level="info">Backup up exising static web files</echo>
+        <copy todir="${backup_temp_dir}">
+            <fileset dir="${web_server_deploy_dir}" includes="${web_file_pattern}"/>
+        </copy>
+
+        <property name="backup_filename" value="${backup_filename_prefix}.${backup_timestamp}.zip"/>
+        <echo level="info" message="Creating backup file: ${backup_filename}"/>
+        <zip destfile="${backup_dir}/${backup_filename}" basedir="${backup_temp_dir}" compress="true"/>
+
+        <echo level="debug">Removing backup temporary directory</echo>
+        <delete dir="${backup_temp_dir}"/>
+    </target>
+    
+    <!--========================================================================
+    // Remove old files
+    //=======================================================================-->
+    <target name="clean_deploy" depends="undeploy">
+        <delete>
+            <fileset dir="${web_server_deploy_dir}" includes="${web_file_pattern}"/>
+        </delete>
+    </target>
+
+    <!--========================================================================
+    // Deploy static web files to webserver
+    //=======================================================================-->
+    <target name="deploy_web">
+        <echo level="info">Deploying static web files</echo>
+        <mkdir dir="${web_server_deploy_dir}"/>
+        <unwar src="${publishDir}/${catalina_context_name}.war"
+                dest="${web_server_deploy_dir}"
+                overwrite="true">
+            <patternset includes="${web_file_pattern}"/>
+        </unwar>
+    </target>
+    
+    <!--========================================================================
+    // Deploy specifed .war file.
+    // This will undeploy the .war if it already exists before deploying the new
+    // .war.
+    // This target also creates a backup of the existing state so the user can
+    // reinstate the last known good configuration if this deploy should fail.
+    //=======================================================================-->
+    <target name="deploy" depends="backup,clean_deploy,deploy_web">
+        <echo level="info">Deploying application...</echo>
+        <deploy url="${catalina_manager_url}"
+                username="${catalina_manager_user}"
+                password="${catalina_manager_password}"
+                path="/${catalina_context_name}"
+                war="${publishDir}/${catalina_context_name}.war"/>
+    </target>
+    
+    <!--========================================================================
+    // Deploy using a specified backup file.
+    // Typically used when a deploy fails, and we want to restore the last
+    // known good configuration.
+    //=======================================================================-->
+    <!--target name="deploy_using_backup">
+        <echo level="info">Deploying .war file</echo>
+        <unzip src="${deploy_backup_file}" dest="${app_server_deploy_dir}"/>
+        
+        <echo level="info">Deploying static web files</echo>
+        <unzip src="${deploy_backup_file}" dest="${web_server_deploy_dir}">
+            <patternset includes="${web_file_pattern}"/>
+        </unzip>
+    </target-->
+    
+    
+    <target name="listProperties">
+        <echo level="info" message="app_server_home=${app_server_home}"/>
+        <echo level="info" message="catalina_ant_jar=${catalina_ant_jar}"/>
+        <echo level="info" message="app_server_home=${web_server_home}"/>
+        <echo level="info" message="ant_contrib_jar=${ant_contrib_jar}"/>
+        <echo level="info" message="catalina_context_name=${catalina_context_name}"/>
+        <echo level="info" message="app_server_context_dir=${app_server_context_dir}"/>
+    </target>
+
+</project>
+
+
+

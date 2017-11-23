@@ -1,0 +1,5 @@
+<table>
+    <tbody>
+        <tr><th><fmt:message key="form.claim.officeuseonly"/></th></tr>
+    </tbody>
+</table>

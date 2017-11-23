@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN" "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+         <mapping resource="com/fgl/cwp/model/Document.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Notice.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Vendor.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Hierarchy.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Store.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/User.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/ColourSize.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Upc.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Sku.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/SkuInventory.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Style.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/StyleInventory.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Report.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/ItemPriceChange.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Brand.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/ConceptShop.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Functionality.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/UserRole.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/PricingIssue.hbm.xml"/>
+		 <mapping resource="com/fgl/cwp/model/SumTotalCourse.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/StoreCurrentStylePrice.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/StyleReceiptlessReturnPrice.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/StyleCostPrice.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/Cap.hbm.xml"/>
+         <mapping resource="com/fgl/cwp/model/sumtotal/eLearnReport/Department.hbm.xml" />
+    </session-factory>
+</hibernate-configuration>

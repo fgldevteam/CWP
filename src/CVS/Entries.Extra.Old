@@ -1,0 +1,12 @@
+/dbpool.properties////
+/displaytag.properties////
+/hibernate-dbcp.properties////
+/hibernate-jndi.properties////
+/hibernate.cfg.xml////
+/language.properties////
+/log4j.properties////
+/reporter.properties////
+/security-constraint.properties////
+/sumtotal-dbcp.properties////
+/sumtotal-jndi.properties////
+/sumtotal.cfg.xml////

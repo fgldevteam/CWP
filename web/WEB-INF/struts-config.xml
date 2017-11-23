@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+    <form-beans>
+        <form-bean name="mainBean" type="com.fgl.cwp.presentation.MainBean"/>
+        <form-bean name="documentsBean" type="com.fgl.cwp.presentation.DocumentsBean"/>
+        <form-bean name="productSearchBean" type="com.fgl.cwp.presentation.ProductSearchBean"/>
+        <form-bean name="productDetailsBean" type="com.fgl.cwp.presentation.ProductDetailsBean"/>
+        <form-bean name="storeDetailsBean" type="com.fgl.cwp.presentation.StoreDetailsBean"/>
+        <form-bean name="loginBean" type="com.fgl.cwp.presentation.LoginBean"/>
+        <form-bean name="reportBean" type="com.fgl.cwp.presentation.ReportBean"/>
+        <form-bean name="itemPriceChangeReportBean" type="com.fgl.cwp.presentation.ItemPriceChangeReportBean" />
+        <form-bean name="packageReportBean" type="com.fgl.cwp.presentation.PackageReportBean" />
+        <form-bean name="manageNoticeBean" type="com.fgl.cwp.presentation.ManageNoticeBean"/>
+        <form-bean name="manageUserBean" type="com.fgl.cwp.presentation.ManageUserBean">
+            <form-property name="selectedManagedStores" type="java.lang.Integer[]"/>
+            <form-property name="selectedUnManagedStores" type="java.lang.Integer[]"/>
+        </form-bean>
+        <form-bean name="manageDocumentBean" type="com.fgl.cwp.presentation.ManageDocumentBean"/>
+        <form-bean name="systemManagerBean" type="com.fgl.cwp.presentation.SystemManagerBean"/>
+        <form-bean name="carrierDistBean" type="com.fgl.cwp.presentation.forms.CarrierDistBean"/>
+        <form-bean name="damagedCartonBean" type="com.fgl.cwp.presentation.forms.DamagedCartonBean"/>
+        <form-bean name="interStoreTransferBean" type="com.fgl.cwp.presentation.forms.InterStoreTransferBean"/>
+        <form-bean name="repairAndMaintenanceBean" type="com.fgl.cwp.presentation.forms.RepairAndMaintenanceBean"/>
+        <form-bean name="ironHorseBean" type="com.fgl.cwp.presentation.forms.IronHorseBean"/>
+        <form-bean name="pricingIssuesBean" type="com.fgl.cwp.presentation.forms.PricingIssuesBean"/>
+        <form-bean name="inventoryAdjBean" type="com.fgl.cwp.presentation.forms.InventoryAdjBean"/>
+        <form-bean name="managePricingIssueBean" type="com.fgl.cwp.presentation.ManagePricingIssueBean"/>
+		<form-bean name="eLearningReportBean" type="com.fgl.cwp.presentation.ELearningReportBean"/>
+		<form-bean name="manageElearningBean" type="com.fgl.cwp.presentation.ManageElearningBean"/>			
+		<form-bean name="ElearningCoursesForm" type="com.fgl.cwp.presentation.forms.ElearningCoursesForm"/>
+    </form-beans>
+
+
+     <!--
+         <global-exceptions>
+             <exception key="errors.general" type="java.lang.Exception" path="/common/Error.jsp"/>
+         </global-exceptions>
+     -->
+
+    <global-forwards>
+        <forward name="login" path="/jsp/login.jsp"/>
+        <forward name="main" path="/jsp/main.jsp"/>
+        <!--forward name="upclookup" path="/jsp/upclookup.jsp"/-->
+        <forward name="documents" path="/jsp/documents.jsp?category=documents"/>
+        <forward name="troubleshoot" path="/jsp/documents.jsp?category=troubleshoot"/>
+        <forward name="session_timeout" path="/jsp/session-timeout.jsp"/> 
+    </global-forwards>
+
+
+    <action-mappings>
+
+        <action path="/login" type="com.fgl.cwp.struts.BeanAction"
+                name="loginBean"
+                scope="request"
+                parameter="login"
+                input="failure"
+                validate="true">
+            <forward name="success" path="/secure/loadMainPage.do"/>
+            <forward name="failure" path="/jsp/login.jsp"/>            
+        </action>
+        
+        <action path="/maintenance" type="com.fgl.cwp.struts.BeanAction"
+                name="loginBean"
+                scope="request"
+                parameter="login"
+                input="failure"
+                validate="true">
+            <forward name="success" path="/secure/loadMainPage.do"/>
+            <forward name="failure" path="/jsp/login.jsp"/>            
+        </action>
+        
+        <action path="/secure/logoff" type="com.fgl.cwp.struts.BeanAction"
+                name="loginBean"
+                scope="request"
+                parameter="logoff">
+            <forward name="success" path="/jsp/login.jsp"/>
+        </action>
+
+        <action path="/secure/loadMainPage" type="com.fgl.cwp.struts.BeanAction"
+                name="mainBean"
+                scope="session"
+                parameter="loadMainPage">
+            <forward name="success" path="/jsp/main.jsp" redirect="true"/>
+        </action>
+
+        <!-- Documents -->
+        <action path="/secure/loadDocuments" type="com.fgl.cwp.struts.BeanAction"
+                name="documentsBean"
+                scope="session"
+                parameter="loadDocuments"/>
+
+        <action path="/secure/loadChildDocuments" type="com.fgl.cwp.struts.BeanAction"
+                name="documentsBean"
+                scope="session"
+                parameter="loadChildDocuments"/>
+
+        <action path="/secure/searchDocument" type="com.fgl.cwp.struts.BeanAction"
+                name="documentsBean"
+                scope="session"
+                parameter="searchDocuments"/>
+
+        <!-- Product Search -->
+        <action path="/secure/loadHierarchySearch" type="com.fgl.cwp.struts.BeanAction"
+                name="productSearchBean"
+                scope="session"
+                parameter="loadHierarchySearch">
+            <forward name="success" path="/jsp/products/upclookup.jsp"/>
+        </action>
+
+        <action path="/secure/resetAll" type="com.fgl.cwp.struts.BeanAction"
+                name="productSearchBean"
+                scope="session"
+                parameter="resetAll">
+            <forward name="success" path="/jsp/products/upclookup.jsp"/>
+        </action>
+
+        <action path="/secure/searchProducts" type="com.fgl.cwp.struts.BeanAction"
+                name="productSearchBean"
+                scope="session"
+                parameter="getProductSearchResults">
+            <forward name="success" path="/jsp/products/upclookup.jsp"/>
+            <forward name="failure" path="/jsp/products/upclookup.jsp"/>
+        </action>
+
+        <!-- Product Info -->
+        <action path="/secure/loadProductDetails" type="com.fgl.cwp.struts.BeanAction"
+                name="productDetailsBean"
+                scope="session"
+                parameter="loadProduct">
+            <forward name="success" path="/jsp/products/productDetails.jsp"/>
+            <forward name="failure" path="/jsp/products/upclookup.jsp"/>
+        </action>
+
+        <action path="/secure/loadSkuDetails" type="com.fgl.cwp.struts.BeanAction"
+                name="productDetailsBean"
+                scope="session"
+                parameter="loadSkuDetails">
+            <forward name="success" path="/jsp/products/productDetails.jsp"/>
+            <forward name="failure" path="/jsp/products/productDetails.jsp"/>
+        </action>
+        
+        <action path="/secure/storeStyleInventory" type="com.fgl.cwp.struts.BeanAction"
+                name="productDetailsBean"
+                scope="session"
+                parameter="loadStyleInventory">
+            <forward name="success" path="/jsp/products/styleInventory.jsp"/>
+            <forward name="failure" path="/jsp/products/productDetails.jsp"/>
+        </action>
+                
+        <action path="/secure/storeSkuInventory" type="com.fgl.cwp.struts.BeanAction"
+                name="productDetailsBean"
+                scope="session"
+                parameter="loadSkuInventory">
+            <forward name="success" path="/jsp/products/skuInventory.jsp"/>
+            <forward name="failure" path="/jsp/products/productDetails.jsp"/>
+        </action>
+
+        <!-- Store Info -->
+        <action path="/secure/getStoreDetails" type="com.fgl.cwp.struts.BeanAction"
+                name="storeDetailsBean"
+                scope="request"
+                parameter="getStoreDetails">
+            <forward name="success" path="/jsp/products/store.jsp"/>
+        </action>
+
+        <!-- Report Queue -->
+        <action path="/secure/loadReportQueue" type="com.fgl.cwp.struts.BeanAction"
+                name="reportBean"
+                scope="request"
+                parameter="fetchReportQueue">
+            <forward name="success" path="/jsp/reports/queue.jsp"/>
+            <forward name="failure" path="/secure/loadMainPage.do"/>
+        </action>
+        
+        <!-- Item Price Change Report -->
+        <action path="/secure/loadItemPriceChangeReportForm" type="com.fgl.cwp.struts.BeanAction"
+                name="reportBean"
+                scope="request"
+                parameter="initializeItemPriceChangeReport">
+            <forward name="success" path="/jsp/reports/itemPriceChange.jsp"/>
+            <forward name="failure" path="/secure/loadMainPage.do"/>
+        </action>
+
+        <action path="/secure/submitItemPriceChangeReport" type="com.fgl.cwp.struts.BeanAction"
+                name="reportBean"
+                scope="request"
+                parameter="submitItemPriceChangeReport">
+            <forward name="success" path="/secure/loadReportQueue.do"/>
+            <forward name="failure" path="/jsp/reports/itemPriceChange.jsp"/>
+        </action>
+
+        <action path="/reporter/createItemPriceChangeReport" type="com.fgl.cwp.struts.BeanAction"
+                name="itemPriceChangeReportBean"
+                scope="request"
+                parameter="fetchData">
+            <forward name="success" path="/pdf/item_price_change.jsp"/>
+            <forward name="failure" path="/secure/loadMainPage.do"/>
+        </action>
+
+        <action path="/pdf/createItemPriceChangeReport" type="com.fgl.cwp.struts.BeanAction"
+                name="itemPriceChangeReportBean"
+                scope="request"
+                parameter="fetchData">
+            <forward name="failure" path="/secure/loadMainPage.do"/>
+            <forward name="success" path="/pdf/item_price_change.jsp"/>
+        </action>
+		
+		<!-- elearning report -->
+		<action path="/secure/loadELearningReportForm" type="com.fgl.cwp.struts.BeanAction"
+                name="eLearningReportBean"
+                scope="session"
+                parameter="initializeELearningReport">
+            <forward name="success" path="/jsp/reports/eLearningReport.jsp"/>
+            <forward name="failure" path="/secure/loadMainPage.do"/>
+            <forward name="session-timeout" path="/jsp/session-timeout.jsp"/>
+        </action>        
+        	
+		<action path="/report/ELearningReport" type="com.fgl.cwp.struts.ElearnSubmitReportAction" 
+			    name="eLearningReportBean"
+				scope="session"
+			    parameter="method">
+            <forward name="success" path="/jsp/reports/eLearnRedirect.jsp"/>
+            <!--forward name="success" path="/secure/loadELearningReportForm.do"/-->
+			<forward name="failure" path="/jsp/reports/eLearningReport.jsp"/>
+			<!-- <forward name="session-timeout" path="/jsp/session-timeout.jsp"/> -->
+			<forward name="session-timeout" path="/login.do"/>
+        </action>
+		
+		
+        
+		<!-- Admin -->
+        <action path="/secure/admin/loadNotices" type="com.fgl.cwp.struts.BeanAction"
+                name="manageNoticeBean"
+                scope="session"
+                parameter="loadNotices">
+            <forward name="success" path="/jsp/admin/notices.jsp"/>
+            <forward name="failure" path="/jsp/admin/editNotice.jsp"/>
+        </action>
+
+        <action path="/secure/admin/loadDocuments" type="com.fgl.cwp.struts.BeanAction"
+                name="manageDocumentBean"
+                scope="session"
+                parameter="loadDocuments">
+            <forward name="success" path="/jsp/admin/documents.jsp"/>
+            <forward name="failure" path="/jsp/admin/editDocument.jsp"/>
+        </action>
+
+        <action path="/secure/admin/loadUsers" type="com.fgl.cwp.struts.BeanAction"
+                name="manageUserBean"
+                scope="session"
+                parameter="loadUsers">
+            <forward name="success" path="/jsp/admin/users.jsp"/>
+            <forward name="failure" path="/jsp/admin/editUser.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/deleteNotice" type="com.fgl.cwp.struts.BeanAction"
+                name="manageNoticeBean"
+                scope="session"
+                parameter="deleteNotice">
+            <forward name="success" path="/secure/admin/loadNotices.do"/>
+            <forward name="failure" path="/jsp/admin/notices.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/addNotice" type="com.fgl.cwp.struts.BeanAction"
+                name="manageNoticeBean"
+                scope="session"
+                parameter="createNotice">
+            <forward name="success" path="/jsp/admin/editNotice.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/editNotice" type="com.fgl.cwp.struts.BeanAction"
+                name="manageNoticeBean"
+                scope="session"
+                parameter="editNotice">
+            <forward name="success" path="/jsp/admin/editNotice.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/saveNotice" type="com.fgl.cwp.struts.BeanAction"
+                name="manageNoticeBean"
+                scope="session"
+                parameter="saveNotice">
+            <forward name="success" path="/secure/admin/loadNotices.do"/>
+            <forward name="failure" path="/jsp/admin/editNotice.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/deleteUser" type="com.fgl.cwp.struts.BeanAction"
+                name="manageUserBean"
+                scope="session"
+                parameter="deleteUser">
+            <forward name="success" path="/secure/admin/loadUsers.do"/>
+            <forward name="failure" path="/jsp/admin/users.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/addUser" type="com.fgl.cwp.struts.BeanAction"
+                name="manageUserBean"
+                scope="session"
+                parameter="createUser">
+            <forward name="success" path="/jsp/admin/editUser.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/editUser" type="com.fgl.cwp.struts.BeanAction"
+                name="manageUserBean"
+                scope="session"
+                parameter="editUser">
+            <forward name="success" path="/jsp/admin/editUser.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/addManagedStoreToUser" type="com.fgl.cwp.struts.BeanAction"
+                name="manageUserBean"
+                scope="session"
+                parameter="addManagedStores">
+            <forward name="success" path="/jsp/admin/editUser.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/removeManagedStoreFromUser" type="com.fgl.cwp.struts.BeanAction"
+                name="manageUserBean"
+                scope="session"
+                parameter="removedManagedStores">
+            <forward name="success" path="/jsp/admin/editUser.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/saveUser" type="com.fgl.cwp.struts.BeanAction"
+                name="manageUserBean"
+                scope="session"
+                parameter="saveUser">
+            <forward name="success" path="/secure/admin/loadUsers.do"/>
+            <forward name="failure" path="/jsp/admin/editUser.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/addDocument" type="com.fgl.cwp.struts.BeanAction"
+                name="manageDocumentBean"
+                scope="session"
+                parameter="createDocument">
+            <forward name="success" path="/jsp/admin/editDocument.jsp"/>            
+        </action>
+        
+        <action path="/secure/admin/editDocument" type="com.fgl.cwp.struts.BeanAction"
+                name="manageDocumentBean"
+                scope="session"
+                parameter="editDocument">
+            <forward name="success" path="/jsp/admin/editDocument.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/saveDocument" type="com.fgl.cwp.struts.BeanAction"
+                name="manageDocumentBean"
+                scope="session"
+                parameter="saveDocument">
+            <forward name="success" path="/secure/admin/loadDocuments.do"/>
+            <forward name="failure" path="/jsp/admin/editDocument.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/deleteDocument" type="com.fgl.cwp.struts.BeanAction"
+                name="manageDocumentBean"
+                scope="session"
+                parameter="deleteDocument">
+            <forward name="success" path="/secure/admin/loadDocuments.do"/>
+            <forward name="failure" path="/jsp/admin/documents.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/loadHeaders" type="com.fgl.cwp.struts.BeanAction"
+                name="manageDocumentBean"
+                scope="session"
+                parameter="loadHeaders">
+            <forward name="success" path="/jsp/admin/editDocument.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/assignGroup" type="com.fgl.cwp.struts.BeanAction"
+                name="manageDocumentBean"
+                scope="session"
+                parameter="assignGroup">
+            <forward name="success" path="/jsp/admin/editDocument.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/assignSubGroup" type="com.fgl.cwp.struts.BeanAction"
+                name="manageDocumentBean"
+                scope="session"
+                parameter="assignSubGroup">
+            <forward name="success" path="/jsp/admin/editDocument.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/assignCategory" type="com.fgl.cwp.struts.BeanAction"
+                name="manageDocumentBean"
+                scope="session"
+                parameter="assignCategory">
+            <forward name="success" path="/jsp/admin/editDocument.jsp"/>
+        </action>
+        
+        <action path="/secure/admin/assignType" type="com.fgl.cwp.struts.BeanAction"
+                name="manageDocumentBean"
+                scope="session"
+                parameter="assignType">
+            <forward name="success" path="/jsp/admin/editDocument.jsp"/>
+        </action>
+
+        <action path="/secure/admin/deleteForms" type="com.fgl.cwp.struts.BeanAction"
+                name="systemManagerBean"
+                scope="session"
+                parameter="deleteForms">
+            <forward name="success" path="/jsp/admin/system.jsp"/>
+            <forward name="failure" path="/jsp/admin/system.jsp"/>
+        </action>
+
+        <action path="/secure/admin/loadPricingIssues" type="com.fgl.cwp.struts.BeanAction"
+                name="managePricingIssueBean"
+                scope="session"
+                parameter="loadPricingIssues">
+            <forward name="success" path="/jsp/admin/pricingIssue.jsp"/>
+        </action>
+        
+         <action path="/secure/admin/loadElearningCourses" type="com.fgl.cwp.struts.BeanAction"
+                name="manageElearningBean"
+                scope="session"
+                parameter="loadCourses">
+            <forward name="success" path="/jsp/admin/elearningCourses.jsp"/>
+            <forward name="failure" path="/jsp/admin/system.jsp"/>
+        </action>
+        
+		<action path="/secure/admin/saveElearningCourses" type="com.fgl.cwp.struts.PersistElearningCoursesAction"
+		        name="ElearningCoursesForm"
+		        scope="session"		       
+		        parameter="method"
+                unknown="false"
+                validate="true">
+		    <forward name="success" path="/secure/admin/loadElearningCourses.do"/>
+		    <forward name="failure" path="/jsp/admin/system.jsp"/>
+		    <forward name="session-timeout" path="/login.do"/>
+		</action>
+       
+        <action path="/secure/admin/closePricingIssue" type="com.fgl.cwp.struts.BeanAction"
+                name="managePricingIssueBean"
+                scope="session"
+                parameter="closePricingIssue">
+            <forward name="success" path="/secure/admin/loadPricingIssues.do"/>
+			<forward name="failure" path="/jsp/admin/pricingIssue.jsp"/>
+        </action>
+
+		<!-- Forms -->
+        <action path="/secure/forms/newCarrierDist" type="com.fgl.cwp.struts.BeanAction"
+                name="carrierDistBean"
+                scope="session"
+                validate="false"
+                parameter="create">
+            <forward name="success" path="/jsp/forms/carrierDist.jsp"/>
+        </action>
+                
+		<action path="/secure/forms/submitCarrierDist" type="com.fgl.cwp.struts.BeanAction"
+				name="carrierDistBean"
+                validate="true"
+                input="failure"
+				scope="session"
+				parameter="doSubmit">
+			<forward name="success" path="/jsp/forms/download.jsp"/>
+			<forward name="failure" path="/jsp/forms/carrierDist.jsp"/>
+		</action>
+
+        <action path="/secure/forms/newDamagedCarton" type="com.fgl.cwp.struts.BeanAction"
+                name="damagedCartonBean"
+                scope="session"
+                validate="false"
+                parameter="create">
+            <forward name="success" path="/jsp/forms/damagedCartons.jsp"/>
+        </action>
+                
+		<action path="/secure/forms/submitDamagedCarton" type="com.fgl.cwp.struts.BeanAction"
+				name="damagedCartonBean"
+                validate="true"
+                input="failure"
+				scope="session"
+				parameter="doSubmit">
+			<forward name="success" path="/jsp/forms/download.jsp"/>
+			<forward name="failure" path="/jsp/forms/damagedCartons.jsp"/>
+		</action>
+
+        <action path="/secure/forms/newInterStoreTransfer" type="com.fgl.cwp.struts.BeanAction"
+                name="interStoreTransferBean"
+                scope="session"
+                validate="false"
+                parameter="create">
+            <forward name="success" path="/jsp/forms/interStoreTransfer.jsp"/>
+        </action>
+                
+		<action path="/secure/forms/submitInterStoreTransfer" type="com.fgl.cwp.struts.BeanAction"
+				name="interStoreTransferBean"
+                validate="true"
+                input="failure"
+				scope="session"
+				parameter="doSubmit">
+			<forward name="success" path="/jsp/forms/download.jsp"/>
+			<forward name="failure" path="/jsp/forms/interStoreTransfer.jsp"/>
+		</action>
+        
+        <action path="/secure/forms/newRepairAndMaintenance" type="com.fgl.cwp.struts.BeanAction"
+                name="repairAndMaintenanceBean"
+                validate="false"
+                scope="session"
+                parameter="create">
+            <forward name="success" path="/jsp/forms/repairAndMaintenance.jsp"/>
+        </action>
+        
+        <action path="/secure/forms/submitRepairAndMaintain" type="com.fgl.cwp.struts.BeanAction"
+                name="repairAndMaintenanceBean"
+                validate="true"
+                input="failure"
+                scope="session"
+                parameter="doSubmit">
+             <forward name="success" path="/jsp/forms/download.jsp"/>
+             <forward name="failure" path="/jsp/forms/repairAndMaintenance.jsp"/>
+         </action>
+         
+        <action path="/secure/forms/newPricingIssues" type="com.fgl.cwp.struts.BeanAction"
+                name="pricingIssuesBean"
+                scope="session"
+                validate="false"
+                parameter="create">
+            <forward name="success" path="/jsp/forms/pricingIssues.jsp"/>
+        </action>
+                
+		<action path="/secure/forms/submitPricingIssues" type="com.fgl.cwp.struts.BeanAction"
+				name="pricingIssuesBean"
+                validate="true"
+                input="failure"
+				scope="session"
+				parameter="doSubmit">
+			<forward name="success" path="/jsp/forms/confirmation.jsp"/>
+			<forward name="failure" path="/jsp/forms/pricingIssues.jsp"/>
+		</action>
+
+        <action path="/secure/forms/newInventoryAdj" type="com.fgl.cwp.struts.BeanAction"
+                name="inventoryAdjBean"
+                scope="session"
+                validate="false"
+                parameter="create">
+            <forward name="success" path="/jsp/forms/inventoryAdj.jsp"/>
+        </action>
+                
+		<action path="/secure/forms/submitInventoryAdj" type="com.fgl.cwp.struts.BeanAction"
+				name="inventoryAdjBean"
+                validate="true"
+                input="failure"
+				scope="session"
+				parameter="doSubmit">
+			<forward name="success" path="/jsp/forms/download.jsp"/>
+			<forward name="failure" path="/jsp/forms/inventoryAdj.jsp"/>
+		</action>
+
+        <action path="/secure/forms/newNonWarrantyAdj" type="com.fgl.cwp.struts.BeanAction"
+                name="inventoryAdjBean"
+                scope="session"
+                validate="false"
+                parameter="create">
+            <forward name="success" path="/jsp/forms/nonWarrantyAdj.jsp"/>
+        </action>
+                
+		<action path="/secure/forms/submitNonWarrantyAdj" type="com.fgl.cwp.struts.BeanAction"
+				name="inventoryAdjBean"
+                validate="true"
+                input="failure"
+				scope="session"
+				parameter="doSubmit">
+			<forward name="success" path="/jsp/forms/download.jsp"/>
+			<forward name="failure" path="/jsp/forms/nonWarrantyAdj.jsp"/>
+		</action>
+
+    </action-mappings>
+
+    <controller>
+          <!-- The "input" parameter on "action" elements is the name of a
+               local or global "forward" rather than a module-relative path -->
+        <set-property property="inputForward" value="true"/>
+    </controller>
+
+    <message-resources parameter="language_ascii" null="true"/>
+
+	<plug-in className="net.sf.navigator.menu.MenuPlugIn">
+		<set-property property="menuConfig" value="/WEB-INF/menu-config.xml" /> 
+  	</plug-in>
+    
+</struts-config>

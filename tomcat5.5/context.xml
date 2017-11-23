@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context
+        workDir="work\Catalina\localhost\cwp"
+        path="/cwp"
+        displayName="CWP"
+        reloadable="false"
+        antiJARLocking="true"
+    	antiResourceLocking="true">
+    <Resource
+        name="jdbc/CWPDB"
+        auth="Container"
+        factory="org.apache.naming.factory.BeanFactory"         
+		type="com.mchange.v2.c3p0.ComboPooledDataSource"  
+        user="@keyJDBCDatabaseUser@"
+        password="@keyJDBCDatabasePassword@"
+        driverClass="net.sourceforge.jtds.jdbc.Driver"
+        jdbcUrl="jdbc:jtds:sqlserver://@keyJDBCDatabaseServer@:@keyJDBCDatabasePort@/@keyJDBCDatabaseName@;instance=@keyJDBCDatabaseInstance@;lastUpdateCount=true"
+        acquireIncrement="@keyDBCPAcquireIncrement@"
+		numHelperThreads="@keyDBCPNumHelperThreads@"
+		maxPoolSize="@keyDBCPMaxPoolSize@"
+		minPoolSize="@keyDBCPMinPoolSize@"
+		initialPoolSize="@keyDBCPInitialPoolSize@"
+		maxStatementsPerConnection="@keyDBCPMaxStatementsPerConnection@"
+		maxIdleTime="@keyDBCPMaxIdleTime@"
+		maxIdleTimeExcessConnections="@keyDBCPMaxIdleTimeExcessConnections@"
+	/>  
+     
+    <!-- for the sumtotal DB  -->
+     <Resource
+        name="jdbc/SumTotalDB"
+        auth="Container"
+        factory="org.apache.naming.factory.BeanFactory"         
+		type="com.mchange.v2.c3p0.ComboPooledDataSource"
+        user="@sumTotal_keyJDBCDatabaseUser@"
+        password="@sumTotal_keyJDBCDatabasePassword@"
+        driverClass="net.sourceforge.jtds.jdbc.Driver"
+        jdbcUrl="jdbc:jtds:sqlserver://@sumTotal_keyJDBCDatabaseServer@:@sumTotal_keyJDBCDatabasePort@/@sumTotal_keyJDBCDatabaseName@;lastUpdateCount=true"
+        acquireIncrement="@keyDBCPAcquireIncrement@"
+		numHelperThreads="@keyDBCPNumHelperThreads@"
+		maxPoolSize="@keyDBCPMaxPoolSize@"
+		minPoolSize="@keyDBCPMinPoolSize@"
+		initialPoolSize="@keyDBCPInitialPoolSize@"
+		maxStatementsPerConnection="@keyDBCPMaxStatementsPerConnection@"
+		maxIdleTime="@keyDBCPMaxIdleTime@"
+		maxIdleTimeExcessConnections="@keyDBCPMaxIdleTimeExcessConnections@"
+	/>           
+        
+    <Resource name="mail/CWPMAILSESSION" auth="Container"
+              type="javax.mail.Session"
+              mail.smtp.host="@keyMailServer@"/>
+</Context>

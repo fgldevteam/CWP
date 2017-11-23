@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<queries>
+<block name="attempSubselect"><![CDATA[
+   (select tbl_tmx_attempt.EmpFK as empId, 
+           tbl_tmx_attempt.EndDt as take_date, 
+           tbl_tmx_attempt.score as score, 
+           activityFK as courseId
+   from TBL_TMX_Attempt 
+   where ActivityFK in (:courses)
+         and grdfk = 1 
+         :date)
+]]></block>
+
+<block name="commonSelect"><![CDATA[
+	select  Emp_FullName,
+        Vice_President,
+        Regional_Manager, 
+        District_Manager,
+        Store,
+        attemp_score,
+        date_taken,
+        Department
+        :courseSelectStatement
+]]></block>
+<block name="reportGroupOrderBy"><![CDATA[
+   group by Vice_President,
+         District_Manager,
+         Regional_Manager,
+         Store,
+         Department,
+         emp_fullname,
+         attemp_score,
+         date_taken
+order by Vice_President,
+         District_Manager,
+         Regional_Manager,
+         Store,
+         Department,
+         emp_fullname,
+         attemp_score            
+]]></block>
+
+<query name="DateRangeDataByCourseAndStore"><![CDATA[
+select  emp.Emp_LName as empLName,
+		 emp.Emp_FName as empFName,
+		 emp.Emp_ExtID as empId,
+        org.Org_Name as storeName,      
+        activity.activityname as courseName,       
+        case 
+                  when job.Job_Name like '% CAS' then 'Cash Associate'
+                  when job.Job_Name like '% CMS' then 'CMS Associate'
+                  when job.Job_Name like '% HGA' then 'Hardgoods Associate'
+                  when job.Job_Name like '% MGR' then 'Management' 
+                  when job.Job_Name like '% NBG' then 'NBG / Golf Experts Associate'
+                  when job.Job_Name like '% OTH' then 'Seasonal Associate'
+                  when job.Job_Name like '% SER' then 'Service Shop Associate'
+                  when job.Job_Name like '% SGA' then 'Soft Goods Associate'
+                  when job.Job_Name like '% SHI' then 'Shipping Associate'
+                  when job.Job_Name like '% VIS' then 'Visual Associate'
+                  when job.Job_Name like '% FTW' then 'Footwear Associate' 
+				  when job.Job_Name like '% CLO' then 'Clothing Associate' 
+				  when job.Job_Name like '% SMA' then 'SM Associate' 
+				  when job.Job_Name like '% HXA' then 'HX Associate' 
+                  else 'Other'
+		        end as department,		       
+                vt.EndDt as date_taken,
+                vt.score as score,
+                vt.ActivityFK as courseId,
+                optOrg.OptOrg_Txt1 as vicePresident,
+                optOrg.OptOrg_Txt2 as regManager,
+                optOrg.optOrg_txt3 as districtManager,
+                ( select  count(emp.Emp_PK) 
+                      from tblemp emp, tblemporg, org
+                      where org.Org_PK = tblemporg.EmpOrg_OrgFK      
+                      and emp.Emp_PK =tblemporg.EmpOrg_EmpFK                    
+                      and Org_Cd in :storeNum
+                      and emp.Emp_EmpStatFK = 1) as numEmp
+from 
+
+                 (select max(attempt_pk) as attempt_pk, 
+                         score,
+                         ut.*
+                  from 
+                        (SELECT max(isnull(tbl_tmx_attempt.EndDt,getdate())) EndDt, 
+                                tbl_tmx_attempt.ActivityFK,
+                                tbl_tmx_attempt.empFK 
+                        from ( select *
+                               from tbl_tmx_attempt
+                               :date
+                             ) sbtbl,
+                         tbl_tmx_attempt 
+                        where sbtbl.Attempt_PK = tbl_tmx_attempt.Attempt_PK
+                        and tbl_tmx_attempt.ActivityFK in :courses                        
+                        and tbl_tmx_attempt.CompletionStatus = 1                                  
+                        group by tbl_tmx_attempt.empFK, tbl_tmx_attempt.ActivityFK) ut,
+                        TBL_TMX_Attempt attempt
+                        where isnull(ut.EndDt,getdate()) = isnull(attempt.EndDt,getdate())
+                        and ut.empfk = attempt.EmpFK
+                        and ut.ActivityFK = attempt.ActivityFK                          
+                        group by score, ut.enddt, ut.activityfk, ut.empfk                                            
+                  ) vt,
+                  tbl_tmx_activity activity,
+                  tblemp emp,
+                  tblemporg emporg,
+                  org org,
+                  tblempjob empjob,
+                  Job job,
+                  optOrg optorg
+where vt.ActivityFK = activity.activity_pk
+    and emp.Emp_PK = vt.EmpFK 
+    and vt.score >= 80    
+    and emp.Emp_PK = emporg.EmpOrg_EmpFK
+    and emporg.EmpOrg_OrgFK = org.Org_PK
+    and empjob.EmpJob_EmpFK = emporg.EmpOrg_EmpFK
+    and job.Job_PK = empjob.EmpJob_JobFK
+    and optOrg.OptOrg_OrgFK = org.Org_PK  
+    and vt.score is not null   
+    and org.Org_Cd in :storeNum
+    and emp.Emp_EmpStatFK = 1
+    
+group by emp.Emp_LName,
+		 emp.Emp_FName,
+		 emp.Emp_ExtID,
+         org.Org_Name,
+         activity.activityname,
+         vt.attempt_pk,
+         vt.score,
+         vt.EndDt,
+         vt.ActivityFK,
+         vt.empFK,
+         job.Job_Name,
+         optOrg.OptOrg_Txt1,
+         optOrg.OptOrg_Txt2,
+         optOrg.optOrg_txt3         
+]]></query>
+
+<query name="DateRangeDataByCourseAndStoreFilteredByJob"><![CDATA[
+select  emp.Emp_LName as empLName,
+		 emp.Emp_FName as empFName,
+		 emp.Emp_ExtID as empId,
+        org.Org_Name as storeName,      
+        activity.activityname as courseName,       
+        case 
+            when job.Job_Name like '% CAS' then 'Cash Associate'
+            when job.Job_Name like '% CMS' then 'CMS Associate'
+            when job.Job_Name like '% HGA' then 'Hardgoods Associate'
+            when job.Job_Name like '% MGR' then 'Management' 
+            when job.Job_Name like '% NBG' then 'NBG / Golf Experts Associate'
+            when job.Job_Name like '% OTH' then 'Seasonal Associate'
+            when job.Job_Name like '% SER' then 'Service Shop Associate'
+            when job.Job_Name like '% SGA' then 'Soft Goods Associate'
+            when job.Job_Name like '% SHI' then 'Shipping Associate'
+            when job.Job_Name like '% VIS' then 'Visual Associate'
+            when job.Job_Name like '% FTW' then 'Footwear Associate' 
+			when job.Job_Name like '% CLO' then 'Clothing Associate' 
+			when job.Job_Name like '% SMA' then 'SM Associate' 
+			when job.Job_Name like '% HXA' then 'HX Associate' 
+            else 'Other'
+		end as department,		       
+            vt.EndDt as date_taken,
+            vt.score as score,
+            vt.ActivityFK as courseId,
+            optOrg.OptOrg_Txt1 as vicePresident,
+            optOrg.OptOrg_Txt2 as regManager,
+            optOrg.optOrg_txt3 as districtManager,
+            ( select  count(emp.Emp_PK) 
+                 from tblemp emp, tblemporg, org, tblempjob
+                 where org.Org_PK = tblemporg.EmpOrg_OrgFK      
+                 and emp.Emp_PK =tblemporg.EmpOrg_EmpFK                    
+                 and Org_Cd in :storeNum
+                 and emp.Emp_PK = tblempJob.EmpJob_EmpFK
+                 and tblempJob.EmpJob_JobFK in :jobs
+                 and emp.Emp_EmpStatFK = 1) as numEmp
+from 
+                 (select max(attempt_pk) as attempt_pk, 
+                         score,
+                         ut.*
+                  from 
+                        (SELECT max(isnull(tbl_tmx_attempt.EndDt,getdate())) EndDt, 
+                                tbl_tmx_attempt.ActivityFK,
+                                tbl_tmx_attempt.empFK 
+                        from ( select *
+                               from tbl_tmx_attempt
+                               :date
+                             ) sbtbl,
+                         tbl_tmx_attempt 
+                        where sbtbl.Attempt_PK = tbl_tmx_attempt.Attempt_PK
+                        and tbl_tmx_attempt.ActivityFK in :courses                        
+                        and tbl_tmx_attempt.CompletionStatus = 1                                  
+                        group by tbl_tmx_attempt.empFK, tbl_tmx_attempt.ActivityFK) ut,
+                        TBL_TMX_Attempt attempt
+                        where isnull(ut.EndDt,getdate()) = isnull(attempt.EndDt,getdate())
+                        and ut.empfk = attempt.EmpFK
+                        and ut.ActivityFK = attempt.ActivityFK                          
+                        group by score, ut.enddt, ut.activityfk, ut.empfk                                            
+                  ) vt,
+                  tbl_tmx_activity activity,
+                  tblemp emp,
+                  tblemporg emporg,
+                  org org,
+                  tblempjob empjob,
+                  Job job,
+                  optOrg optorg
+where vt.ActivityFK = activity.activity_pk
+    and emp.Emp_PK = vt.EmpFK 
+    and vt.score >= 80    
+    and emp.Emp_PK = emporg.EmpOrg_EmpFK
+    and emporg.EmpOrg_OrgFK = org.Org_PK
+    and empjob.EmpJob_EmpFK = emporg.EmpOrg_EmpFK
+    and job.Job_PK = empjob.EmpJob_JobFK
+    and empjob.EmpJob_JobFK in :jobs
+    and optOrg.OptOrg_OrgFK = org.Org_PK  
+    and vt.score is not null   
+    and org.Org_Cd in :storeNum
+    and emp.Emp_EmpStatFK = 1
+    
+group by emp.Emp_LName,
+		 emp.Emp_FName,
+		 emp.Emp_ExtID,
+         org.Org_Name,
+         activity.activityname,
+         vt.attempt_pk,
+         vt.score,
+         vt.EndDt,
+         vt.ActivityFK,
+         vt.empFK,
+         job.Job_Name,
+         optOrg.OptOrg_Txt1,
+         optOrg.OptOrg_Txt2,
+         optOrg.optOrg_txt3         
+]]></query>
+
+<query name="DateRangeDataByCourseAndDepartInStore"><![CDATA[ 
+  select         
+        emp.Emp_LName as empLName,
+		 emp.Emp_FName as empFName,
+		 emp.Emp_ExtID as empId,
+        org.Org_Name as storeName,      
+        activity.activityname as courseName,       
+        case 
+                  when job.Job_Name like '% CAS' then 'Cash Associate'
+                  when job.Job_Name like '% CMS' then 'CMS Associate'
+                  when job.Job_Name like '% HGA' then 'Hardgoods Associate'
+                  when job.Job_Name like '% MGR' then 'Management' 
+                  when job.Job_Name like '% NBG' then 'NBG / Golf Experts Associate'
+                  when job.Job_Name like '% OTH' then 'Seasonal Associate'
+                  when job.Job_Name like '% SER' then 'Service Shop Associate'
+                  when job.Job_Name like '% SGA' then 'Soft Goods Associate'
+                  when job.Job_Name like '% SHI' then 'Shipping Associate'
+                  when job.Job_Name like '% VIS' then 'Visual Associate'
+                  when job.Job_Name like '% FTW' then 'Footwear Associate' 
+				  when job.Job_Name like '% CLO' then 'Clothing Associate' 
+				  when job.Job_Name like '% SMA' then 'SM Associate' 
+				  when job.Job_Name like '% HXA' then 'HX Associate' 
+                  else 'Other'
+		        end as department,
+		        case 
+                  when job.Job_Name like '% CAS' then 'CAS'
+                  when job.Job_Name like '% CMS' then 'CMS'
+                  when job.Job_Name like '% HGA' then 'HGA'
+                  when job.Job_Name like '% MGR' then 'MGR' 
+                  when job.Job_Name like '% NBG' then 'NBG'
+                  when job.Job_Name like '% OTH' then 'OTH'
+                  when job.Job_Name like '% SER' then 'SER'
+                  when job.Job_Name like '% SGA' then 'SGA'
+                  when job.Job_Name like '% SHI' then 'SHI'
+                  when job.Job_Name like '% VIS' then 'VIS'
+                  when job.Job_Name like '% FTW' then 'FTW'
+                  when job.Job_Name like '% CLO' then 'CLO'
+                  when job.Job_Name like '% SMA' then 'SMA'
+                  when job.Job_Name like '% HXA' then 'HXA'
+                  else 'Other'
+		        end as deptSymbol ,
+                vt.EndDt as date_taken,
+                vt.score as score,
+                vt.ActivityFK as courseId
+from 
+
+                 (select max(attempt_pk) as attempt_pk, 
+                         score,
+                         ut.*
+                  from 
+                        (SELECT max(isnull(tbl_tmx_attempt.EndDt,getdate())) EndDt, 
+                                tbl_tmx_attempt.ActivityFK,
+                                tbl_tmx_attempt.empFK 
+                        from ( select *
+                               from tbl_tmx_attempt
+                               :date
+                             ) sbtbl,
+                         tbl_tmx_attempt 
+                        where sbtbl.Attempt_PK = tbl_tmx_attempt.Attempt_PK
+                        and tbl_tmx_attempt.ActivityFK in :courses                        
+                        and tbl_tmx_attempt.CompletionStatus = 1                                   
+                        group by tbl_tmx_attempt.empFK, tbl_tmx_attempt.ActivityFK) ut,
+                        TBL_TMX_Attempt attempt
+                        where isnull(ut.EndDt,getdate()) = isnull(attempt.EndDt,getdate())
+                        and ut.empfk = attempt.EmpFK
+                        and ut.ActivityFK = attempt.ActivityFK
+                        group by score, ut.enddt, ut.activityfk, ut.empfk
+                  ) vt,
+                  tbl_tmx_activity activity,
+                  tblemp emp,
+                  tblemporg emporg,
+                  org org,
+                  tblempjob empjob,
+                  Job job
+where vt.ActivityFK = activity.activity_pk
+    and emp.Emp_PK = vt.EmpFK 
+    and vt.score >= 80    
+    and emp.Emp_PK = emporg.EmpOrg_EmpFK
+    and emporg.EmpOrg_OrgFK = org.Org_PK
+    and empjob.EmpJob_EmpFK = emporg.EmpOrg_EmpFK
+    and job.Job_PK = empjob.EmpJob_JobFK
+    and vt.score is not null 
+    and org.Org_Cd in :storeNum 
+    and emp.Emp_EmpStatFK = 1
+   
+group by job.Job_Name,
+         emp.Emp_LName,
+		 emp.Emp_FName,
+		 emp.Emp_ExtID,
+         org.Org_Name,
+         activity.activityname,
+         vt.attempt_pk,
+         vt.score,
+         vt.EndDt,
+         vt.ActivityFK,
+         vt.empFK  
+
+]]></query>
+
+<query name="DateRangeDataByCourseAndDepartInStoreFilteredByJob"><![CDATA[ 
+  select         
+        emp.Emp_LName as empLName,
+		 emp.Emp_FName as empFName,
+		 emp.Emp_ExtID as empId,
+        org.Org_Name as storeName,      
+        activity.activityname as courseName,       
+        case 
+                  when job.Job_Name like '% CAS' then 'Cash Associate'
+                  when job.Job_Name like '% CMS' then 'CMS Associate'
+                  when job.Job_Name like '% HGA' then 'Hardgoods Associate'
+                  when job.Job_Name like '% MGR' then 'Management' 
+                  when job.Job_Name like '% NBG' then 'NBG / Golf Experts Associate'
+                  when job.Job_Name like '% OTH' then 'Seasonal Associate'
+                  when job.Job_Name like '% SER' then 'Service Shop Associate'
+                  when job.Job_Name like '% SGA' then 'Soft Goods Associate'
+                  when job.Job_Name like '% SHI' then 'Shipping Associate'
+                  when job.Job_Name like '% VIS' then 'Visual Associate'
+                  when job.Job_Name like '% FTW' then 'Footwear Associate' 
+				  when job.Job_Name like '% CLO' then 'Clothing Associate' 
+				  when job.Job_Name like '% SMA' then 'SM Associate' 
+				  when job.Job_Name like '% HXA' then 'HX Associate' 
+                  else 'Other'
+		        end as department,
+		        case 
+                  when job.Job_Name like '% CAS' then 'CAS'
+                  when job.Job_Name like '% CMS' then 'CMS'
+                  when job.Job_Name like '% HGA' then 'HGA'
+                  when job.Job_Name like '% MGR' then 'MGR' 
+                  when job.Job_Name like '% NBG' then 'NBG'
+                  when job.Job_Name like '% OTH' then 'OTH'
+                  when job.Job_Name like '% SER' then 'SER'
+                  when job.Job_Name like '% SGA' then 'SGA'
+                  when job.Job_Name like '% SHI' then 'SHI'
+                  when job.Job_Name like '% VIS' then 'VIS'
+                  when job.Job_Name like '% FTW' then 'FTW'
+                  when job.Job_Name like '% CLO' then 'CLO'
+                  when job.Job_Name like '% SMA' then 'SMA'
+                  when job.Job_Name like '% HXA' then 'HXA'
+                  else 'Other'
+		        end as deptSymbol ,
+                vt.EndDt as date_taken,
+                vt.score as score,
+                vt.ActivityFK as courseId
+from 
+
+                 (select max(attempt_pk) as attempt_pk, 
+                         score,
+                         ut.*
+                  from 
+                        (SELECT max(isnull(tbl_tmx_attempt.EndDt,getdate())) EndDt, 
+                                tbl_tmx_attempt.ActivityFK,
+                                tbl_tmx_attempt.empFK 
+                        from ( select *
+                               from tbl_tmx_attempt
+                               :date
+                             ) sbtbl,
+                         tbl_tmx_attempt 
+                        where sbtbl.Attempt_PK = tbl_tmx_attempt.Attempt_PK
+                        and tbl_tmx_attempt.ActivityFK in :courses                        
+                        and tbl_tmx_attempt.CompletionStatus = 1                                   
+                        group by tbl_tmx_attempt.empFK, tbl_tmx_attempt.ActivityFK) ut,
+                        TBL_TMX_Attempt attempt
+                        where isnull(ut.EndDt,getdate()) = isnull(attempt.EndDt,getdate())
+                        and ut.empfk = attempt.EmpFK
+                        and ut.ActivityFK = attempt.ActivityFK
+                        group by score, ut.enddt, ut.activityfk, ut.empfk
+                  ) vt,
+                  tbl_tmx_activity activity,
+                  tblemp emp,
+                  tblemporg emporg,
+                  org org,
+                  tblempjob empjob,
+                  Job job
+where vt.ActivityFK = activity.activity_pk
+    and emp.Emp_PK = vt.EmpFK 
+    and vt.score >= 80    
+    and emp.Emp_PK = emporg.EmpOrg_EmpFK
+    and emporg.EmpOrg_OrgFK = org.Org_PK
+    and empjob.EmpJob_EmpFK = emporg.EmpOrg_EmpFK
+    and job.Job_PK = empjob.EmpJob_JobFK
+    and empjob.EmpJob_JobFK in :jobs
+    and vt.score is not null 
+    and org.Org_Cd in :storeNum 
+    and emp.Emp_EmpStatFK = 1
+   
+group by job.Job_Name,
+         emp.Emp_LName,
+		 emp.Emp_FName,
+		 emp.Emp_ExtID,
+         org.Org_Name,
+         activity.activityname,
+         vt.attempt_pk,
+         vt.score,
+         vt.EndDt,
+         vt.ActivityFK,
+         vt.empFK  
+
+]]></query>
+
+
+<query name="getAllEmployesInStoreWithoutChosenCourse"><![CDATA[
+
+select all_employees.empName as emp_fullname,
+       all_employees.emp_lastName as empLName,
+       all_employees.emp_firstname as empFName,
+       all_employees.empId as empId,
+       all_employees.department as department
+from
+(
+    select tblemp.Emp_LName + ' ' + tblemp.Emp_FName as empName,
+           tblemp.Emp_LName as emp_lastName,
+           tblemp.Emp_FName as emp_firstname,
+           tblemp.Emp_ExtID as empId,
+           case 
+                  when job.Job_Name like '% CAS' then 'Cash Associate'
+                  when job.Job_Name like '% CMS' then 'CMS Associate'
+                  when job.Job_Name like '% HGA' then 'Hardgoods Associate'
+                  when job.Job_Name like '% MGR' then 'Management' 
+                  when job.Job_Name like '% NBG' then 'NBG / Golf Experts Associate'
+                  when job.Job_Name like '% OTH' then 'Seasonal Associate'
+                  when job.Job_Name like '% SER' then 'Service Shop Associate'
+                  when job.Job_Name like '% SGA' then 'Soft Goods Associate'
+                  when job.Job_Name like '% SHI' then 'Shipping Associate'
+                  when job.Job_Name like '% VIS' then 'Visual Associate'
+                  when job.Job_Name like '% FTW' then 'Footwear Associate' 
+				  when job.Job_Name like '% CLO' then 'Clothing Associate' 
+				  when job.Job_Name like '% SMA' then 'SM Associate' 
+				  when job.Job_Name like '% HXA' then 'HX Associate' 
+                  else 'Other'
+		        end as department
+    from tblemp,
+         tblemporg emporg,
+         org,
+         tblempjob empjob,
+         Job job         
+    where tblemp.Emp_PK = emporg.EmpOrg_EmpFK
+       and emporg.EmpOrg_OrgFK = org.Org_PK
+       and empjob.EmpJob_EmpFK = emporg.EmpOrg_EmpFK
+       and job.Job_PK = empjob.EmpJob_JobFK
+      and tblemp.Emp_EmpStatFK = 1
+      and org.Org_Cd in :storeNum
+) as all_employees
+where all_employees.empId not in 
+(
+     select emp.Emp_ExtID as empId
+from 
+
+                 (select max(attempt_pk) as attempt_pk, score, ut.* 
+					from 
+					    (SELECT max(isnull(tbl_tmx_attempt.EndDt,getdate())) EndDt, 
+                                tbl_tmx_attempt.ActivityFK,
+                                tbl_tmx_attempt.empFK 
+                        from ( select *
+                               from tbl_tmx_attempt
+                               :date
+                             ) sbtbl,
+                         tbl_tmx_attempt 
+                        where sbtbl.Attempt_PK = tbl_tmx_attempt.Attempt_PK
+                        and tbl_tmx_attempt.ActivityFK in :courses                        
+                        and tbl_tmx_attempt.CompletionStatus = 1                                   
+                        group by tbl_tmx_attempt.empFK, tbl_tmx_attempt.ActivityFK) ut,
+                        TBL_TMX_Attempt attempt
+                        where isnull(ut.EndDt,getdate()) = isnull(attempt.EndDt,getdate())
+                        and ut.empfk = attempt.EmpFK
+                        and ut.ActivityFK = attempt.ActivityFK
+                        group by score, ut.enddt, ut.activityfk, ut.empfk
+                  ) vt,
+                  tbl_tmx_activity activity,
+                  tblemp emp,
+                  tblemporg emporg,
+                  org org,
+                  tblempjob empjob,
+                  Job job
+where vt.ActivityFK = activity.activity_pk
+    and emp.Emp_PK = vt.EmpFK 
+    and vt.score >= 80    
+    and emp.Emp_PK = emporg.EmpOrg_EmpFK
+    and emporg.EmpOrg_OrgFK = org.Org_PK
+    and empjob.EmpJob_EmpFK = emporg.EmpOrg_EmpFK
+    and job.Job_PK = empjob.EmpJob_JobFK
+    and vt.score is not null 
+    and org.Org_Cd in :storeNum 
+    and emp.Emp_EmpStatFK = 1
+   
+group by job.Job_Name,
+         emp.Emp_LName,
+		 emp.Emp_FName,
+		 emp.Emp_ExtID,
+         org.Org_Name,
+         activity.activityname,
+         vt.attempt_pk,
+         vt.score,
+         vt.EndDt,
+         vt.ActivityFK,
+         vt.empFK  
+)
+
+]]></query>
+
+<query name="getAllEmployesInStoreWithoutChosenCourseFilteredByJob"><![CDATA[
+
+select all_employees.empName as emp_fullname,
+       all_employees.emp_lastName as empLName,
+       all_employees.emp_firstname as empFName,
+       all_employees.empId as empId,
+       all_employees.department as department
+from
+(
+    select tblemp.Emp_LName + ' ' + tblemp.Emp_FName as empName,
+           tblemp.Emp_LName as emp_lastName,
+           tblemp.Emp_FName as emp_firstname,
+           tblemp.Emp_ExtID as empId,
+           case 
+                  when job.Job_Name like '% CAS' then 'Cash Associate'
+                  when job.Job_Name like '% CMS' then 'CMS Associate'
+                  when job.Job_Name like '% HGA' then 'Hardgoods Associate'
+                  when job.Job_Name like '% MGR' then 'Management' 
+                  when job.Job_Name like '% NBG' then 'NBG / Golf Experts Associate'
+                  when job.Job_Name like '% OTH' then 'Seasonal Associate'
+                  when job.Job_Name like '% SER' then 'Service Shop Associate'
+                  when job.Job_Name like '% SGA' then 'Soft Goods Associate'
+                  when job.Job_Name like '% SHI' then 'Shipping Associate'
+                  when job.Job_Name like '% VIS' then 'Visual Associate'
+                  when job.Job_Name like '% FTW' then 'Footwear Associate' 
+				  when job.Job_Name like '% CLO' then 'Clothing Associate' 
+				  when job.Job_Name like '% SMA' then 'SM Associate' 
+				  when job.Job_Name like '% HXA' then 'HX Associate' 
+                  else 'Other'
+		        end as department
+    from tblemp,
+         tblemporg emporg,
+         org,
+         tblempjob empjob,
+         Job job         
+    where tblemp.Emp_PK = emporg.EmpOrg_EmpFK
+       and emporg.EmpOrg_OrgFK = org.Org_PK
+       and empjob.EmpJob_EmpFK = emporg.EmpOrg_EmpFK
+       and job.Job_PK = empjob.EmpJob_JobFK
+       and empjob.EmpJob_JobFK in :jobs
+      and tblemp.Emp_EmpStatFK = 1
+      and org.Org_Cd in :storeNum
+) as all_employees
+where all_employees.empId not in 
+(
+     select emp.Emp_ExtID as empId
+from 
+
+                 (select max(attempt_pk) as attempt_pk, score, ut.* 
+					from 
+					    (SELECT max(isnull(tbl_tmx_attempt.EndDt,getdate())) EndDt, 
+                                tbl_tmx_attempt.ActivityFK,
+                                tbl_tmx_attempt.empFK 
+                        from ( select *
+                               from tbl_tmx_attempt
+                               :date
+                             ) sbtbl,
+                         tbl_tmx_attempt 
+                        where sbtbl.Attempt_PK = tbl_tmx_attempt.Attempt_PK
+                        and tbl_tmx_attempt.ActivityFK in :courses                        
+                        and tbl_tmx_attempt.CompletionStatus = 1                                   
+                        group by tbl_tmx_attempt.empFK, tbl_tmx_attempt.ActivityFK) ut,
+                        TBL_TMX_Attempt attempt
+                        where isnull(ut.EndDt,getdate()) = isnull(attempt.EndDt,getdate())
+                        and ut.empfk = attempt.EmpFK
+                        and ut.ActivityFK = attempt.ActivityFK
+                        group by score, ut.enddt, ut.activityfk, ut.empfk
+                  ) vt,
+                  tbl_tmx_activity activity,
+                  tblemp emp,
+                  tblemporg emporg,
+                  org org,
+                  tblempjob empjob,
+                  Job job
+where vt.ActivityFK = activity.activity_pk
+    and emp.Emp_PK = vt.EmpFK 
+    and vt.score >= 80    
+    and emp.Emp_PK = emporg.EmpOrg_EmpFK
+    and emporg.EmpOrg_OrgFK = org.Org_PK
+    and empjob.EmpJob_EmpFK = emporg.EmpOrg_EmpFK
+    and job.Job_PK = empjob.EmpJob_JobFK
+    and vt.score is not null 
+    and org.Org_Cd in :storeNum 
+    and emp.Emp_EmpStatFK = 1
+   
+group by job.Job_Name,
+         emp.Emp_LName,
+		 emp.Emp_FName,
+		 emp.Emp_ExtID,
+         org.Org_Name,
+         activity.activityname,
+         vt.attempt_pk,
+         vt.score,
+         vt.EndDt,
+         vt.ActivityFK,
+         vt.empFK  
+)
+
+]]></query>
+
+<query name="EmployeesInDepartment"><![CDATA[
+   select count(distinct(tblemp.Emp_PK)) as counter
+   from job,
+        tblempjob,
+        tblemporg,
+        tblemp,
+        org
+   where org.Org_Cd in :storeNumber
+       and right(job.Job_Name,3) like :department
+       and job.Job_PK = tblempjob.EmpJob_JobFK 
+       and tblempjob.EmpJob_EmpFK = tblemporg.EmpOrg_EmpFK
+       and org.org_pk  = tblemporg.EmpOrg_OrgFK
+       and tblemp.Emp_PK = tblemporg.EmpOrg_EmpFK
+       and tblemp.Emp_EmpStatFK = 1
+]]></query>
+
+<query name="getCourses_sumtotal"><![CDATA[
+	select activity_pk as courseId,
+	       activityname as courseName,
+	       activitydesc as courseDesrc
+	from tbl_tmx_activity
+	-- where active = 1
+]]></query>
+
+<query name="getJobData"><![CDATA[ 
+SELECT Job_PK FROM Job WHERE :jobs
+]]></query>
+
+</queries>

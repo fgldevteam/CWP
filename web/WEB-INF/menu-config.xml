@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<MenuConfig>
+    <Displayers>
+        <Displayer name="DropDown" type="net.sf.navigator.displayer.DropDownMenuDisplayer" /> 
+        <Displayer name="Simple" type="net.sf.navigator.displayer.SimpleMenuDisplayer" /> 
+        <Displayer name="CoolMenu" type="net.sf.navigator.displayer.CoolMenuDisplayer" /> 
+        <Displayer name="CoolMenu4" type="net.sf.navigator.displayer.CoolMenuDisplayer4" /> 
+        <Displayer name="MenuForm" type="net.sf.navigator.example.PermissionsFormMenuDisplayer" /> 
+        <Displayer name="ListMenu" type="net.sf.navigator.displayer.ListMenuDisplayer" /> 
+        <Displayer name="TabbedMenu" type="net.sf.navigator.displayer.TabbedMenuDisplayer" /> 
+        <Displayer name="Velocity" type="net.sf.navigator.displayer.VelocityMenuDisplayer" /> 
+    </Displayers>
+	
+    <Menus>
+		<Menu name="portalMenu" title="header.menu.portal">
+			<Item name="portalMenu1" title="header.menu.home" page="/secure/loadMainPage.do"/>
+        	<Item name="portalMenu2" title="header.menu.home.logoff" page="/secure/logoff.do"/>
+        </Menu>
+
+		<Menu name="reportMenu" title="header.menu.reports" roles="store,1,4,5">
+			<Item name="reportMenu1" title="header.menu.reports.queue" page="/secure/loadReportQueue.do" roles="store,1,4,5"/>
+			<Item name="reportMenu2" title="header.menu.reports.itemprice" page="/secure/loadItemPriceChangeReportForm.do" roles="store,1,4,5"/>
+			<Item name="reportMenu4" title="header.menu.reports.elearning" page="/secure/loadELearningReportForm.do" roles="store,1,4,5"/>
+		</Menu>
+		
+		<Menu name="searchMenu" title="header.menu.search" roles="store,1,2,4,5,6">
+			<Item name="searchMenu1" title="header.menu.upc" page="/secure/loadHierarchySearch.do?level=0" roles="store,1,4,5,6"/>
+			<Item name="searchMenu2" title="header.menu.documents" page="/secure/loadDocuments.do?category=documents" roles="store,1,2,4,5,6"/>
+			<Item name="searchMenu3" title="header.menu.troubleshooting" page="/secure/loadDocuments.do?category=troubleshoot" roles="store,1,2,4,5,6"/>
+		</Menu>
+        
+        <Menu name="linksMenu" title="header.menu.links">
+			<Item name="linksMenu1" title="header.menu.links.cbtGiftCard" location="http://cbt.fgl.net/Giftcard/index.htm" target="_blank"/>
+			<Item name="linksMenu2" title="header.menu.links.cbtLayawayBasics" location="http://cbt.fgl.net/Layaway/index.htm" target="_blank"/>
+			<Item name="linksMenu3" title="header.menu.links.citrix" location="http://apps.fglsports.com" target="_blank"/>
+			<Item name="linksMenu4" title="header.menu.links.forzani411" location="https://forzani411.forzani.com/" target="_blank"/>
+			<Item name="linksMenu5" title="header.menu.links.power2learn" location="http://power2learn.fglcorporate.net" target="_blank"/>
+		</Menu>
+		
+		<Menu name="adminMenu" title="header.menu.admin" roles="1,2,3,7,8,9">
+			<Item name="adminMenu7_1" title="header.menu.admin.users" page="/secure/admin/loadUsers.do" roles="1,7"/>
+			<Item name="adminMenu7_2" title="header.menu.admin.notices" page="/secure/admin/loadNotices.do" roles="1,3"/>
+			<Item name="adminMenu7_3" title="header.menu.admin.documents" page="/secure/admin/loadDocuments.do" roles="1,2"/>
+			<Item name="adminMenu7_4" title="header.menu.admin.pricingissues" page="/secure/admin/loadPricingIssues.do" roles="1,8"/>
+			<Item name="adminMenu7_5" title="header.menu.admin.elearning" page="/secure/admin/loadElearningCourses.do" roles="9"/>		
+		</Menu>
+			
+	</Menus>
+</MenuConfig>

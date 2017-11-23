@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+       <!-- <property name="connection.url">jdbc:jtds:sqlserver://calsum01:1433/sumtotalTST;lastUpdateCount=true</property>
+       <property name="connection.username">sumtotal_cwp</property>
+       <property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>       
+       <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+       <property name="dialect">net.sf.hibernate.dialect.SQLServerDialect</property>
+       <property name="connection.password">7Cwp_sT</property>  -->
+       <!--  do the mapping of persisted classes here -->
+      <!-- <mapping resource="com/fgl/cwp/model/sumtotal/Course.hbm.xml"/>
+       <mapping resource="com/fgl/cwp/model/sumtotal/CourseLabel.hbm.xml"/> -->
+    </session-factory>
+</hibernate-configuration>

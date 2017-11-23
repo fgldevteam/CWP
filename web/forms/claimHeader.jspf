@@ -1,0 +1,29 @@
+<table style="width:520px;align:center;">
+    <tbody>
+        <tr><td colspan="5"><h1><fmt:message key="${title}"/></h1></td></tr>
+        <tr><td colspan="5">&#160;</td></tr>
+        <tr>
+            <td class="label" style="width:125px"><fmt:message key="form.label.date"/>:</td>
+            <td style="width:125px" class="userinput"><c:out value="${today}"/></td>
+            <td style="width:20px">&#160;</td>
+            <td class="label" style="width:125px"><fmt:message key="form.label.claimnum"/>:</td>
+            <td style="width:125px">____________________</td>
+        </tr><tr>
+            <td colspan="3">&#160;</td>
+            <td class="label"><fmt:message key="form.label.duedate"/>:</td>
+            <td>____________________</td>
+        </tr><tr>
+            <td class="label"><fmt:message key="form.label.storenum"/>:</td>
+            <td colspan="2" class="userinput"><fmt:formatNumber value="${storeNum}" groupingUsed="false" maxIntegerDigits="4" minIntegerDigits="4"/></td>
+            <td>
+            <table>
+                <tr>
+                    <td style="align:right;"><img src="../images/unchecked.gif" class="checkbox"/></td>
+                    <td class="label" style="padding:0;margin:0;"><fmt:message key="form.label.closed"/>:</td>
+                </tr>
+            </table>
+            </td>
+            <td>____________________</td>
+        </tr>
+    </tbody>
+</table>

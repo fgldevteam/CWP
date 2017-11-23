@@ -1,0 +1,117 @@
+<style>
+    body {
+        size:Letter;
+        padding:0.5in;
+        font-family:Helvetica;
+        font-size:7
+    }
+    th {
+        font-weight:bold
+    }
+    table.pageHeader{
+        border:0px;
+        background-color:#666666;
+        color:#ffffff;
+        width:100%;
+    }
+    table.pageHeader td{
+    	padding: 3px;
+    }
+    .pageTitle{
+        font-size:16pt;
+        font-weight:bold;
+        vertical-align:middle;
+        text-align:center;
+    }
+    td{
+        padding-right: 0.12cm;
+        padding-top:  1px;
+        padding-bottom: 1px;
+    }
+    table.divisionHeader{
+        background-color:#cccccc;
+        color:#000000;
+        border: 0px;
+        width: 100%;
+        font-weight: bold;
+    }    
+    tr.heading{
+        text-decoration:underline;
+        font-weight:bold;
+    }
+    
+    table.container{
+        width:100%;
+        border:0px;
+    }
+    
+    td.courseHeading{
+    	border:1px;
+    	vertical-align:middle;
+      font-weight:bold;
+      font-size:7pt;
+    }
+    
+    td.scoreDate{
+    	border:1px;
+    	vertical-align:middle;
+      font-weight:bold;
+      font-size:7pt;
+    }
+    
+    td.department{
+    	text-decoration:underline;
+      font-weight:bold;
+    }
+    
+    td.store{
+    	padding-top:5px;
+    	padding-bottom:5px;
+      font-weight:bold;
+    }
+    
+    td.deptTotal{
+    	border-top:1px;
+    	padding-top:5px;
+      font-weight:bold;
+    }
+    td.storeTotal{
+    	text-decoration:underline;
+    	border-top:2px;
+    	padding-top:5px;
+      font-weight:bold;
+    }
+    td.storeSumTotal{
+    	border-top:2px;
+    	padding-top:5px;
+    	padding-bottom:5px;
+      font-weight:bold;
+      border-bottom:2px;
+    	border-bottom-style:double;
+    }
+    td.deptCourseTotal{
+    	font-weight:bold;
+    }
+    td.deptSaturation{
+    	padding-bottom:20px;
+      font-weight:bold;
+    }
+    
+    table.eLearnContainer{
+    		width:100%;
+        border-top:2px;
+        border-bottom:2px;
+        border-color:#808080;
+    }
+    tr.deptCourseCount{
+    	background-color:#D7D7D7;
+    }
+    tr.empRow{
+    	background-color:#FFFFFF;
+    }
+    td.elearnDept{
+    	text-decoration:underline;
+      font-weight:bold;
+    }
+    
+</style>

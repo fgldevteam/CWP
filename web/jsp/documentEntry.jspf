@@ -1,0 +1,35 @@
+<tr>
+	<td>
+	<c:choose>
+	    <c:when test="${doc.type=='D'}">
+	        <fmt:message var="docDir" key='documents.filepath'/>
+	        <c:url var="docURL" value="/FileDownload/${doc.fileName}">
+	            <c:param name="inline" value="false"/>
+	            <c:param name="dir" value="${docDir}"/>
+	            <c:param name="contentType" value="${doc.contentType}"/>
+	            <c:param name="file" value="${doc.fileName}"/>
+	        </c:url>
+	        <a href="<c:out value='${docURL}'/>">
+	        <c:out value="${doc.title}"/>
+	        </a>
+	    </c:when>
+	    <c:when test="${doc.type=='F'}">
+	        <a href="<html:rewrite page='${doc.fileName}'/>?documentId=<c:out value='${doc.id}'/>">
+	        <c:out value="${doc.title}"/>
+	        </a>
+	    </c:when>
+	    <c:when test="${doc.type=='L'}">
+	    	<a href="#" onclick="openLink('<c:out value='${doc.fileName}'/>','w','<fmt:message key='documents.link.confirm'/>');">
+	    		<c:out value="${doc.title}"/>
+	    	</a>
+	    </c:when>
+	    <c:otherwise>
+	    <c:out value="${doc.title}"/>
+	    </c:otherwise>
+	</c:choose>
+	</td>
+	<td>
+		<fmt:message var="dateFormat" key="default.dateformat"/>
+    <fmt:formatDate value="${doc.dateModified}" pattern="${dateFormat}"/>
+	</td>
+</tr>

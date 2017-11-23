@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4"
+    xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <display-name>CWP</display-name>
+    <description>Corporate Web Portal</description>
+
+
+    <!-- Inform JSTL what the message resources are so that <fmt:message> tag works properly -->
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>language_ascii</param-value>
+    </context-param>
+
+
+    <filter>
+        <filter-name>SecurityFilter</filter-name>
+        <filter-class>com.fgl.cwp.common.SecurityFilter</filter-class>
+        <init-param>
+            <param-name>ignoredURIs</param-name>
+            <param-value>login.jsp, index.jsp, /login.do, item_price_change.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>securityConstraint</param-name>
+            <param-value>/security-constraint.properties</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>PDFFilter</filter-name>
+        <filter-class>org.faceless.report.PDFFilter</filter-class>
+        <init-param>
+            <param-name>license</param-name>
+            <param-value>GCBF1E6002628C0</param-value>
+        </init-param>
+    </filter>
+    
+	<filter>
+	    <filter-name>sitemesh</filter-name>
+	    <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+	</filter>
+	<filter>
+		<filter-name>MenuPermissionsFilter</filter-name>
+		<filter-class>com.fgl.cwp.common.MenuPermissionsFilter</filter-class>
+	</filter>
+	<filter>
+        <filter-name>StoreFormFilter</filter-name>
+        <filter-class>com.fgl.cwp.common.StoreFormFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SecurityFilter</filter-name>
+        <url-pattern>/secure/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>SecurityFilter</filter-name>
+        <url-pattern>/jsp/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PDFFilter</filter-name>
+        <url-pattern>/pdf/*</url-pattern>
+    </filter-mapping>    
+    <filter-mapping>
+	    <filter-name>sitemesh</filter-name>
+	    <url-pattern>*.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+      	<dispatcher>FORWARD</dispatcher>
+      	<dispatcher>INCLUDE</dispatcher>
+   	</filter-mapping>
+   	<filter-mapping>
+   		<filter-name>MenuPermissionsFilter</filter-name>
+   		<url-pattern>*.jsp</url-pattern>
+   	</filter-mapping>
+	<filter-mapping>
+		<filter-name>StoreFormFilter</filter-name>
+		<url-pattern>/secure/forms/*</url-pattern>
+	</filter-mapping>
+
+    <servlet>
+        <servlet-name>action</servlet-name>
+        <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+        <init-param>
+            <param-name>config</param-name>
+            <param-value>/WEB-INF/struts-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>2</param-value>
+        </init-param>
+        <init-param>
+            <param-name>detail</param-name>
+            <param-value>2</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+	<servlet>
+        <servlet-name>init</servlet-name>
+        <servlet-class>com.fgl.cwp.servlet.InitServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet>
+    	<servlet-name>SumTotalInitServlet</servlet-name>
+    	<servlet-class>com.fgl.cwp.servlet.SumTotalInitServlet</servlet-class>
+    	<load-on-startup>3</load-on-startup>
+	</servlet>
+    <servlet>
+    	<servlet-name>FileDownloadServlet</servlet-name>
+    	<servlet-class>com.fgl.cwp.servlet.FileDownloadServlet</servlet-class>
+        <load-on-startup>4</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+    	<servlet-name>FileDownloadServlet</servlet-name>
+    	<url-pattern>/FileDownload/*</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+
+    <mime-mapping>
+        <extension>xml</extension>
+        <mime-type>text/xml</mime-type>
+    </mime-mapping>
+
+
+    <welcome-file-list>
+        <welcome-file>/index.jsp</welcome-file>
+    </welcome-file-list>
+
+
+    <error-page>
+        <exception-type>java.io.FileNotFoundException</exception-type>
+        <location>/jsp/errorPages/fileNotFound.jsp</location>
+    </error-page>
+    <error-page>
+    	<exception-type>com.fgl.cwp.exception.InvalidDirectoryException</exception-type>
+    	<location>/jsp/errorPages/badFilePath.jsp</location>
+    </error-page>
+    <error-page>
+    	<exception-type>com.fgl.cwp.exception.InsufficientPrivilege</exception-type>
+    	<location>/jsp/errorPages/insufficientPrivilege.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>javax.servlet.ServletException</exception-type>
+        <location>/jsp/errorPages/memoryErrors.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.OutOfMemoryError</exception-type>
+        <location>/jsp/errorPages/memoryErrors.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/jsp/errorPages/400.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/jsp/errorPages/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/jsp/errorPages/500.jsp</location>
+    </error-page>
+    
+</web-app>
+

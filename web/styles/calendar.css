@@ -1,0 +1,88 @@
+/* Popup Calendar Styles */
+
+body {
+	font-family: "Tahoma, Verdana, Arial, Helvetica, sans-serif", Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	margin: 5px 5px 5px 5px;
+	background-color: #FFFFFF;
+}
+
+table.clsOTable {
+	width: 100%;
+	border: 0px none;
+}
+
+table.cls1Table {
+	width: 100%;
+	border: 0px none;
+}
+table.cls1Table tr td {
+	padding: 3px;
+}
+
+table.monthtable {
+	padding: 0px;
+	margin: 0px;
+	border: 0px none;
+	width: 100%;
+}
+table.monthtable tr td {
+	color: #FFFFFF;
+	text-align: center;
+	padding: 0px;
+	margin: 0px;
+}
+table.monthtable tr td.month {
+	width: 100%;
+}
+
+tr.days td {
+	width: 14%;
+	cursor: pointer;
+}
+td {
+	font-size: 12px;
+	text-align: center;
+}
+td.current {
+	border: 2px solid #D81E05;
+	background-color: #FFFFFF;
+}
+td.currentOver {
+	background-color: #BBBBBB;
+	border: 2px solid #D81E05;
+}
+td.weekend {
+	background-color: #DDDDDD;
+}
+td.weekendOver {
+	background-color: #BBBBBB;
+}
+td.regular {
+	background-color: #FFFFFF;
+}
+td.regularOver {
+	background-color: #BBBBBB;
+}
+
+tr.weekdays, tr.weekdays td {
+	background-color: #999999;
+	color: #FFFFFF;
+	text-align: center;
+}
+
+.tdbackground {
+	background-color: #604B03;
+	color: #FFFFFF;
+}
+
+p.thismonth {
+	color: #000000;
+	margin: 0px;
+	padding: 0px;
+}
+p.othermonth {
+	color: #606060;
+	margin: 0px;
+	padding: 0px;
+}

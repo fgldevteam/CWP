@@ -1,0 +1,9 @@
+<table>
+    <tbody>
+        <tr><th>
+            <fmt:message key="form.claim.emailtoclaims">
+                <fmt:param value="${claimEmail}"/>
+            </fmt:message>
+        </th></tr>
+    </tbody>
+</table>

@@ -1,0 +1,575 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>CWP Feature List</title>
+  <style>
+
+body, html{
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size: 8pt;
+}
+
+body{
+margin-left: 0.5in;
+}
+
+h1{
+font-size: 12pt;
+font-weight: bold;
+color: #CC6600;
+margin-left:-0.5in;
+}
+
+h2{
+font-size: 10pt;
+color: #CC6600;
+margin-left:-0.25in;
+}
+
+table{
+font-size: 8pt;
+border-collapse: collapse;
+}
+
+td{
+border: 1px solid silver;
+padding-left: 2pt;
+padding-right: 2pt;
+}
+  </style>
+</head>
+<body>
+<h1>Corporate
+Web Portal - Feature List - New Development (February 2007)
+</h1>
+<h2>Pricing Issues update<br>
+</h2>
+Change Pricing Issue form to make it more user friendly to SupportLink&nbsp;
+<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input name="complete" type="checkbox"> </td>
+      <td>Change pricing issues from pdf to plain text inline on email</td>
+    </tr>
+    <tr>
+      <td><input name="complete" type="checkbox"> </td>
+      <td>Write Pricing Issues to database</td>
+    </tr>
+    <tr>
+      <td><input name="complete" type="checkbox"></td>
+      <td>Create open and recently closed Pricing Issues jsp with ability to close issues. Add to admin hierarchy.</td>
+    </tr>
+    <tr>
+      <td><input name="complete" type="checkbox"></td>
+      <td>Create open and recently closed Pricing Issues view on main page</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h1>Corporate
+Web Portal - Feature List - New Development (September 2005)
+</h1>
+<h2>New CWP Forms<br>
+</h2>
+Develop new forms as PDF which are e-mailed to claims@forzani.com.&nbsp;
+Should be added as items in the documents hierarchy (actual heirarchy TBD)<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td>Pricing Issues</td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Inventory Adjustment</td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Non-Warranty Adjustment</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h1>Corporate
+Web Portal - Feature List - Re-development (Complete)
+</h1>
+<h2>Main Page</h2>
+A list of featured documents and notices.<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td>Featured Document List (expiry date &gt; today)<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Notices List (show all notices.&nbsp; Notices disappear when they are deleted)<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>Report Queue</h2>
+A list of reports submitted by a particular store.&nbsp; When the
+user
+has manually logged in with an id, list all the stores for that user
+and let the user select one.&nbsp; If the user has logged in
+automatically (i.e., with a store number embedded in the HTTP
+user-agent request attribute) then show that store.<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td>Store list for user with id </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Store name for auto-login user </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>List of submitted reports with status (make it Hibernate instead of JSTL SQL tags) </td>
+    </tr>
+  </tbody>
+</table>
+<h2>Item Price Change Report</h2>
+A list of single product price changes for a particular store within a given
+date range.<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td>Form for entering parameters </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Report body to be called by the "reporter" </td>
+    </tr>
+  </tbody>
+</table>
+<h2>Package Price Change
+Report</h2>
+A list of group or package product price changes for a particular store within a given
+date range. Ex. BOGO - Buy One Get One Free deals<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td>Form for entering parameters </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Report body to be called by the "reporter" </td>
+    </tr>
+  </tbody>
+</table>
+<h2>UPC Lookup</h2>
+Allow the user to lookup particular products<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td>Hierarchy Search </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Search by description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Search by UPC </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Replace Vendor with Brand in description search </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Present Colour/Size Grid to lookup UPCs (R12 and PMM)<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>User Colour/Size Grid to lookup SKU inventory<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Lookup Style Inventory regardless of Colour or Size<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>Documents Search</h2>
+Allow the user to search for documents.&nbsp; Also allow them to
+drill
+down through the "folder" structure (e.g.,
+HR&gt;Benefits&gt;Ed.
+Reimbursement)<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td> Parameter screen to search by title and modification date<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Allow the user to drill down through the hierarchy<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>Troubleshooting Search</h2>
+Allow the user to search for troubleshooting documents.&nbsp; Also
+allow them to drill down
+through the "folder" structure.<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td> Parameter screen to search by title and modification date<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Allow the user to drill down through the hierarchy<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h2>Claims Forms<br>
+</h2>
+Allow the user to create claims forms as PDF which are e-mailed to
+claims@forzani.com.&nbsp; Currently being displayed as an item in
+the documents hierarchy (Inv Management&gt;Claims)<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td>Claims On Carrier Distributions<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Claims On Damaged Cartons</td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Claims On InterStore Transfer</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+
+
+<br>
+<h2>E-learning Reports Integration<br>
+</h2>
+Allow the user to generate a report on store(s) on course(s)
+taken by employees in that(those) store(s)
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td>Excel Report generation<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>PDF Report generation</td>
+    </tr>  
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>E-learning administration tool</td>
+    </tr>    
+  </tbody>
+</table>
+<br>
+
+<h2>Forms and other dynamically generated PDFs</h2>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input name="complete" type="checkbox"> </td>
+      <td>Store List (in Documents&gt;Store Ops)&nbsp; <span style="color: rgb(204, 0, 0);">There is also a
+		statically maintained list of stores so which should continue? Should
+		this fall under reports?</span> </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Repairs and Maintenance Form (in Documents&gt;Store Maintenance)&nbsp; <span
+			 style="color: rgb(204, 0, 0);">Does this get e-mailed
+			to someone like the claims forms?</span><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h2>Links</h2>
+Provide the user a way to go to various predefined links (e.g., CBT
+Gift Card, FGL-Interaction, Citrix, etc)<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input name="complete" checked="checked" type="checkbox"> </td>
+      <td> Link menu (appear to be hard-coded links in existing CWP)<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h2>Administration</h2>
+A facility for editing the content of the website and maintaining users
+(i.e., regional general managers) and the stores that they can access.<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input name="complete" checked="checked" type="checkbox"> </td>
+      <td>Maintain Documents with ability to upload PDFs.&nbsp; Documents have an expiry date that determines if the should show on the main page.<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input name="complete" checked="checked" type="checkbox"></td>
+      <td>Maintain Document "Folders" (a.k.a.&nbsp; Headings)<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input name="complete" checked="checked" type="checkbox"></td>
+      <td>Maintain Troubleshooting "documents" with ability to upload PDF.&nbsp; All notices are visible on the main page.<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input name="complete" checked="checked" type="checkbox"></td>
+      <td>Maintain Troubleshooting hierarchy.<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input name="complete" checked="checked" type="checkbox"></td>
+      <td>Maintain notices with ability to upload PDF. Notices are displayed on the main page.</td>
+    </tr>
+    <tr>
+      <td><input name="complete" checked="checked" type="checkbox"></td>
+      <td>Restrict access to admin functions to users with administrator security role</td>
+    </tr>
+    <tr>
+      <td><input name="complete" checked="checked" type="checkbox"></td>
+      <td>E-learning administration page allowing the administrator to make a course reportable or not</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Non-functional requirements
+and constraints<br>
+</h2>
+List of items that will impact the design and implementation of the
+system.<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td> 800 x 600&nbsp;screen resolution<br>
+      </td>
+    </tr>
+    <tr>
+      <td>shut down for database update between 12 p.m. and 4 a.m.<br>
+      </td>
+    </tr>
+    <tr>
+      <td>e-learning might be a new section that administrators would be able to edit<br>
+      </td>
+    </tr>
+    <tr>
+      <td>auto-login for stores (currently done with user-agent "hack")<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>Technical Changes</h2>
+<br>
+Changes to improve the quality of the code base and stop
+driving the developer(s) insane ;-)<br>
+<br>
+<table style="text-align: left;">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Complete </td>
+      <td style="font-weight: bold;">Description </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"> </td>
+      <td>Upgrade to JSP 2.0 <br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>New Ant Script<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Create Class Diagram<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Convert Hibernate mappings to XDoclet generation<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input  name="incomplete" type="checkbox"></td>
+      <td>Convert Hibernate mappings to Hibernate inline annotations using java5 features for speed<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Clean up list of JARs (remove unneeded ones, upgrade to latest versions, and remove duplicates)<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input name="complete" type="checkbox"></td>
+      <td>Fix JavaDocs in all Java files<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Fix Web.xml so that it conforms to DTD or XSD<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Use new Popup Calendar<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Make JSP files work with an application context (e.g.,http://&lt;servername&gt;/&lt;contextname&gt;<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Convert to Tomcat<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Create a SQL script for the data model<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Use FWP Session Manager<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Upgrade Visual Design<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Replace the struts-table tags with the display tag library.
+            (cleaner markup and easier to maintain)<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Introduced Struts Tiles to eliminate unnecessary duplication.<br>
+      </td>
+    </tr>
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Introduced jexcel library to generate excel spreadsheets<br>
+      </td>
+    </tr> 
+    <tr>
+      <td><input checked="checked" name="complete" type="checkbox"></td>
+      <td>Introduced a tiny DB connection Pool outside of hibernate using tomcat dbcp<br>
+      </td>
+    </tr>       
+  </tbody>
+</table>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

@@ -1,0 +1,13 @@
+/ItemCurrentAndMinPrice.dts/1.3/Sun Oct 31 05:17:38 2010/-kb/
+/ItemCurrentAndMinPrice_job.sql/1.2/Mon Jan 18 21:18:07 2010//
+/create_provoda_inventory_view.sql/1.1/Mon Feb 20 16:45:07 2012//
+/cwp262-create-item_current_prices.sql/1.2/Thu Jan 31 17:51:05 2008//
+/cwp292_create_item_cost_cap.sql/1.1/Thu Jul  3 17:36:15 2008//
+/cwp303_create_sum_total_dept.sql/1.1/Tue Sep 16 20:46:02 2008//
+/cwp362_create_item_price_change_ix1.sql/1.2/Tue Nov  9 20:14:08 2010/-kb/
+/cwp390_concept_shop.sql/1.1/Thu Feb  2 15:24:09 2012//
+/item_price_change_3threads.dts/1.1/Wed Jan 13 20:56:43 2010/-kb/
+/item_price_change_3threads_job.sql/1.2/Mon Jan 18 21:18:07 2010//
+/mk_item_price_change_staging.sql/1.2/Mon Jan 18 21:18:07 2010//
+/readme.txt/1.1/Thu Feb 22 18:00:27 2007//
+D
